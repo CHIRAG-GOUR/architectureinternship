@@ -1052,7 +1052,7 @@ const chaptersData = [
     locked: false,
     moduleTitle: "Module 2: Technical Foundations",
     moduleSubtitle: "From Board to Screen",
-    chapterTitle: "Chapter 1: Digital Modeling (BIM/CAD)",
+    chapterTitle: "Chapter 3: Digital Modeling (BIM/CAD)",
     chapterSubtitle: "Intro to industry-standard tools like Revit, Rhino, or AutoCAD.",
     heroImage: "/assets/digital_modeling_hero.png",
     introText:
