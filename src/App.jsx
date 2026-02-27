@@ -44,7 +44,7 @@ import TheVanishingPoint from "./components/activities/TheVanishingPoint";
 import IsometricExtruder from "./components/activities/IsometricExtruder";
 import PerspectiveDetective from "./components/activities/PerspectiveDetective";
 
-/* Chapter 3.1 activities */
+/* Chapter 2.3 activities */
 import CanvasCADSimulator from "./components/activities/CanvasCADSimulator";
 import RhinoNurbsDemo from "./components/activities/RhinoNurbsDemo";
 import RevitBimInspector from "./components/activities/RevitBimInspector";
@@ -60,7 +60,7 @@ const CHAPTER_ACTIVITIES = {
   "1.5": [BuildingAutopsy, AIPrecedentAnalyzer],
   "2.1": [OrthographicSlicer, LineWeightStudio, ProjectionPuzzle],
   "2.2": [TheVanishingPoint, IsometricExtruder, PerspectiveDetective],
-  "3.1": [CanvasCADSimulator, RhinoNurbsDemo, RevitBimInspector],
+  "2.3": [CanvasCADSimulator, RhinoNurbsDemo, RevitBimInspector],
 };
 
 /* ── Mouse tilt on content cards ── */
@@ -389,8 +389,8 @@ import BimCityBackground from "./components/BimCityBackground";
 
 function BackgroundManager() {
   const location = useLocation();
-  // Chapter 3.1 gets the Bim City
-  if (location.pathname.includes("/chapter/3.1")) {
+  // Chapter 2.3 gets the Bim City
+  if (location.pathname.includes("/chapter/2.3")) {
     return <BimCityBackground />;
   }
   // Chapter 2.2 gets the Isometric Background

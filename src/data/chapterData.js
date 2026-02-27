@@ -1045,9 +1045,9 @@ const chaptersData = [
     },
   },
   {
-    id: "3.1",
+    id: "2.3",
     locked: false,
-    moduleTitle: "Module 3: Digital Translation",
+    moduleTitle: "Module 2: Technical Foundations",
     moduleSubtitle: "From Board to Screen",
     chapterTitle: "Chapter 1: Digital Modeling (BIM/CAD)",
     chapterSubtitle: "Intro to industry-standard tools like Revit, Rhino, or AutoCAD.",
@@ -1068,12 +1068,12 @@ const chaptersData = [
         url: "https://youtu.be/cmR9cfWJRUU",
       },
       {
-        title: "What is Rhino 3D?",
-        url: "https://youtu.be/XwyJMKLEoCg",
+        title: "AutoCAD Basic Tutorial for Beginners - Part 2",
+        url: "https://youtu.be/g_jKTv3pLp0",
       },
       {
-        title: "What Is Revit? BIM Software from Autodesk",
-        url: "https://youtu.be/_qqT9j0rzuk",
+        title: "AutoCAD Basic Tutorial for Beginners - Part 3",
+        url: "https://youtu.be/37S-2wZ2r0Q",
       }
     ],
     concepts: [
@@ -1084,6 +1084,10 @@ const chaptersData = [
         bullets: [
           "Logic: It is geometry-based. If you draw two lines, the computer doesn't know they are a 'wall'; it just knows they are two parallel lines.",
           "Best For: Detailed construction drawings, electrical layouts, and 2D floor plans where speed and precision are key.",
+          {
+            term: "Start Learning",
+            text: "Watch the introductory video: https://youtu.be/5Zx44MA8gyM"
+          }
         ],
       },
       {
@@ -1093,6 +1097,10 @@ const chaptersData = [
         bullets: [
           "Logic: It is surface-based. It’s perfect for the 'Massing' and 'Form' exercises we did in Chapter 1.",
           "Grasshopper: A plugin for Rhino used for Parametric Design, where you can use 'code' (visual nodes) to create complex patterns impossible to draw by hand.",
+          {
+            term: "Start Learning",
+            text: "Watch 'What is Rhino 3D?': https://youtu.be/XwyJMKLEoCg or 'Pipo Chair Tutorial': https://www.youtube.com/shorts/jizL-7dXTYM. Full Playlist: https://www.youtube.com/playlist?list=PL48k2iKH421iToky9jG7ezc2fYg98dF16"
+          }
         ],
       },
       {
@@ -1102,6 +1110,10 @@ const chaptersData = [
         bullets: [
           "The 'I' in BIM: Every object has Information. If you change a window in a 3D view, it automatically updates in the Floor Plan, Section, and Elevation.",
           "Collaboration: Architects, structural engineers, and plumbers all work on the same 3D model simultaneously.",
+          {
+            term: "Start Learning",
+            text: "Watch 'What Is Revit?': https://youtu.be/_qqT9j0rzuk. Full Playlist: https://www.youtube.com/playlist?list=PL8evaQZnDGAdCKg7XzBVKhFa5kGL7Up5l"
+          }
         ],
       },
     ],
