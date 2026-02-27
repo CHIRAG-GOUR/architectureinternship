@@ -385,13 +385,13 @@ function HomePage() {
 /* ── Background Manager ── */
 import { useLocation } from "react-router-dom";
 import IsometricBackground from "./components/IsometricBackground";
-import BimCityBackground from "./components/BimCityBackground";
+import DetailedArchitectMapBackground from "./components/DetailedArchitectMapBackground";
 
 function BackgroundManager() {
   const location = useLocation();
-  // Chapter 2.3 gets the Bim City
+  // Chapter 2.3 gets the Detailed Architect Map
   if (location.pathname.includes("/chapter/2.3")) {
-    return <BimCityBackground />;
+    return <DetailedArchitectMapBackground />;
   }
   // Chapter 2.2 gets the Isometric Background
   if (location.pathname.includes("/chapter/2.2")) {
