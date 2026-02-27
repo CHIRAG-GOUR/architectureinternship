@@ -1,0 +1,490 @@
+/* ================================================
+   Architecture Internship — Cards + Immersive
+   Dark heading cards, parchment content cards,
+   3D city behind, fully responsive.
+   ================================================ */
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #F1E9D2;
+  color: #3a2e1f;
+  overflow-x: hidden;
+  line-height: 1.7;
+  font-size: 18px;
+  min-height: 100vh;
+}
+
+.hero-title {
+  font-family: 'Playfair Display', serif;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F1E9D2;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c9a96e;
+  border-radius: 10px;
+}
+
+/* Three.js canvas */
+#three-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Content layer */
+.overlay {
+  position: relative;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.overlay>* {
+  pointer-events: auto;
+}
+
+/* Hero */
+.parallax-bg {
+  background-image: url('/assets/Chittorgarh_Fort.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.text-shadow-hero {
+  text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+/* ── Main Container ── */
+.page-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+/* ── HEADING CARDS — warm brown, lighter ── */
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.heading-card {
+  display: block;
+  background: linear-gradient(145deg, #5c4033 0%, #4a3525 50%, #6b4d3b 100%);
+  color: #f5e8c7;
+  border: 1px solid rgba(201, 169, 110, 0.3);
+  border-radius: 18px;
+  padding: 2.2rem 2.5rem;
+  margin-bottom: 1.8rem;
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.2),
+    inset 0 0 30px rgba(201, 169, 110, 0.1);
+  transform: translateY(50px);
+  opacity: 0;
+  transition: all 0.9s cubic-bezier(0.23, 1, 0.32, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.heading-card.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.heading-card h2,
+.heading-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+  margin: 0;
+  color: #f5e8c7;
+}
+
+.heading-card .subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  color: rgba(245, 232, 199, 0.65);
+  margin-top: 0.5rem;
+  letter-spacing: 0.5px;
+}
+
+/* Shimmer that plays once on appear */
+.heading-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg,
+      transparent 20%,
+      rgba(201, 169, 110, 0.15) 40%,
+      rgba(255, 215, 150, 0.22) 50%,
+      rgba(201, 169, 110, 0.15) 60%,
+      transparent 80%);
+  background-size: 200% 100%;
+  animation: shimmer 2.5s ease-in-out 0.5s 1 forwards;
+  pointer-events: none;
+}
+
+/* Gold sweep on hover */
+.heading-card::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(135deg, transparent 40%, rgba(255, 215, 150, 0.3) 50%, transparent 60%);
+  transform: translateX(-100%) rotate(30deg);
+  transition: transform 1s ease;
+  pointer-events: none;
+}
+
+.heading-card:hover::after {
+  transform: translateX(100%) rotate(30deg);
+}
+
+.heading-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.3),
+    inset 0 0 40px rgba(201, 169, 110, 0.2);
+  border-color: rgba(212, 184, 138, 0.5);
+}
+
+/* ── CONTENT CARDS ── */
+.content-card {
+  background: #fefcf7;
+  border: 1px solid #d9c4a5;
+  border-radius: 12px;
+  padding: 2rem 2.2rem;
+  margin-bottom: 1.8rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transform: translateY(40px);
+  opacity: 0;
+  transition: transform 0.9s ease, opacity 0.9s ease, box-shadow 0.5s;
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.content-card.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.content-card h3,
+.content-card h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  color: #5c4033;
+  margin-bottom: 0.8rem;
+}
+
+.content-card p,
+.content-card li {
+  line-height: 1.75;
+  color: #4a3728;
+  font-size: 1rem;
+}
+
+.content-card::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(to bottom right, transparent 40%, rgba(255, 255, 255, 0.35) 50%, transparent 60%);
+  transform: translateX(-100%) rotate(30deg);
+  transition: transform 0.8s;
+  pointer-events: none;
+}
+
+.content-card:hover::after {
+  transform: translateX(100%) rotate(30deg);
+}
+
+.content-card:hover {
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: 0 30px 70px rgba(139, 69, 19, 0.22);
+}
+
+/* ── VIDEO inside content card ── */
+.video-wrap {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  border-radius: 10px;
+  margin-top: 1rem;
+}
+
+.video-wrap iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 10px;
+}
+
+/* ── Section spacing ── */
+.section-gap {
+  margin-bottom: 3rem;
+}
+
+/* ── Table inside card ── */
+.content-card table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.content-card th {
+  text-align: left;
+  padding: 0.6rem 0.8rem;
+  border-bottom: 2px solid #d9c4a5;
+  font-family: 'Playfair Display', serif;
+  color: #5c4033;
+  font-size: 0.95rem;
+}
+
+.content-card td {
+  padding: 0.6rem 0.8rem;
+  border-bottom: 1px solid #ece2d2;
+  font-size: 0.95rem;
+  color: #4a3728;
+}
+
+.content-card td:first-child {
+  font-weight: 600;
+  color: #c9a96e;
+}
+
+/* ── Bullet list ── */
+.content-card ul {
+  list-style: none;
+  padding: 0;
+}
+
+.content-card ul li {
+  padding: 0.5rem 0;
+  padding-left: 1.2rem;
+  position: relative;
+}
+
+.content-card ul li::before {
+  content: "▪";
+  position: absolute;
+  left: 0;
+  color: #c9a96e;
+  font-size: 0.8rem;
+  top: 0.65rem;
+}
+
+/* ── Canvas sim ── */
+.sim-canvas {
+  cursor: crosshair;
+  touch-action: none;
+  border-radius: 8px;
+  display: block;
+  margin: 0 auto;
+}
+
+/* ── Footer ── */
+.site-footer {
+  position: relative;
+  z-index: 10;
+  background: linear-gradient(145deg, #5c4033 0%, #4a3525 100%);
+  color: #f5e8c7;
+  text-align: center;
+  padding: 2rem 1.5rem;
+  border-top: 1px solid rgba(201, 169, 110, 0.25);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+}
+
+.site-footer a {
+  color: #c9a96e;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.site-footer a:hover {
+  text-decoration: underline;
+}
+
+/* ── X-Ray Slider ── */
+.xray-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #EDE4D9, #B89A82, #C78F57);
+  outline: none;
+  margin-top: 1.5rem;
+}
+
+.xray-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #3a2e1f;
+  cursor: pointer;
+  border: 3px solid #fefcf7;
+}
+
+.xray-range::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #3a2e1f;
+  cursor: pointer;
+  border: 3px solid #fefcf7;
+}
+
+/* ── Chapter Tabs ── */
+.chapter-tabs-wrap {
+  position: relative;
+  z-index: 20;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 1.5rem 1.5rem 0;
+}
+
+.chapter-tabs-bar {
+  display: flex;
+  gap: 0.6rem;
+  overflow-x: auto;
+  padding: 0.5rem 0;
+  scrollbar-width: none;
+}
+
+.chapter-tabs-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.chapter-tab {
+  flex-shrink: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
+  border: 1px solid rgba(201, 169, 110, 0.3);
+  background: rgba(254, 252, 247, 0.75);
+  backdrop-filter: blur(8px);
+  color: #5c4033;
+  cursor: pointer;
+  transition: all 0.35s;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chapter-tab:hover:not(.locked) {
+  background: rgba(201, 169, 110, 0.2);
+  border-color: #c9a96e;
+  transform: translateY(-2px);
+}
+
+.chapter-tab.active {
+  background: linear-gradient(145deg, #5c4033, #6b4d3b);
+  color: #f5e8c7;
+  border-color: rgba(201, 169, 110, 0.4);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.chapter-tab.locked {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.chapter-tab .lock-icon {
+  font-size: 0.7rem;
+}
+
+.chapter-tab .tab-label {
+  line-height: 1;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .page-container {
+    padding: 2rem 1rem;
+  }
+
+  .heading-card {
+    padding: 1.6rem 1.5rem;
+    border-radius: 14px;
+  }
+
+  .content-card {
+    padding: 1.5rem 1.3rem;
+  }
+
+  .heading-card h2,
+  .heading-card h3 {
+    font-size: 1.6rem;
+  }
+
+  .chapter-tabs-wrap {
+    padding: 1rem 0.8rem 0;
+  }
+
+  .chapter-tab {
+    font-size: 0.8rem;
+    padding: 0.5rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 16px;
+  }
+
+  .heading-card {
+    padding: 1.3rem 1.2rem;
+    border-radius: 12px;
+  }
+
+  .content-card {
+    padding: 1.2rem 1rem;
+  }
+}

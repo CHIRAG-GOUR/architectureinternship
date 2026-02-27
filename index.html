@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Architecture Internship — Chapter Study</title>
+
+  <!-- Fonts: Header uses Playfair Display, body uses Inter -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'parchment': '#FAF5ED',
+            'limestone': '#F0E8D9',
+            'stone-beige': '#EDE4D9',
+            'sand': '#D9CBB9',
+            'warm-clay': '#B89A82',
+            'deep-clay': '#5C4033',
+            'rich-brown': '#3F2A1D',
+            'navy': '#1F3345',
+            'accent': '#C78F57',
+          },
+          fontFamily: {
+            'serif': ['Playfair Display', 'serif'],
+            'body': ['Inter', 'system-ui', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
+</html>

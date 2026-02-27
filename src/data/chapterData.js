@@ -1,0 +1,826 @@
+// Chapter data structure — add new chapters by adding entries to this array
+// Each chapter contains: title, subtitle, intro videos, concept sections, table, golden rule, activities
+
+const chaptersData = [
+  {
+    id: "1.1",
+    tabLabel: "1.1 Language of Form",
+    heroSubtitle: "Foundations in classical form • heritage • spatial thinking",
+    heroImage: "/assets/Chittorgarh_Fort.jpg",
+    moduleTitle: "Module 1: Design Theory & Spatial Literacy",
+    moduleSubtitle: "Foundations of how we perceive and organize space.",
+    chapterTitle: "Chapter 1: The Language of Form",
+    chapterSubtitle: "Understanding mass, volume, and void.",
+    introVideos: [
+      {
+        title: "What is Architecture?",
+        url: "https://youtu.be/tfN5sgQjSiI",
+      },
+      {
+        title: "Architecture 101: The Basics in 10 Minutes",
+        url: "https://youtu.be/rPveNM9IqYk",
+      },
+    ],
+    chapterVideos: [
+      {
+        title: "Essential Art Terms Episode 7: Space, Mass, and Volume",
+        url: "https://youtu.be/KLJp2OS-F4o",
+      },
+      {
+        title: "Understanding Form in Architecture",
+        url: "https://youtu.be/aZx4rk1AkCw",
+      },
+    ],
+    chapterImage: "https://login.skillizee.io/s/articles/699ed2adf10a3d50038d674a/images/1.1_1.png",
+    introText:
+      "Welcome to the foundation of three-dimensional design. Whether you're an aspiring architect, a sculptor, or just someone trying to figure out why a certain room feels \"off,\" understanding these three pillars is essential.",
+    concepts: [
+      {
+        number: "01",
+        title: "Mass: The Solid Presence",
+        description:
+          'Mass refers to the physical bulk of a solid body. It represents the "positive" space — the material itself. When you look at a heavy marble statue or a solid brick wall, you are experiencing mass.',
+        bullets: [
+          {
+            term: "Visual Weight",
+            text: 'Mass often dictates how "heavy" an object looks, regardless of its actual weight.',
+          },
+          {
+            term: "Density",
+            text: "High-mass objects feel permanent, grounded, and impenetrable.",
+          },
+          {
+            term: "Function",
+            text: "In design, mass is used to provide stability and a sense of protection.",
+          },
+        ],
+        accent: "warm-clay",
+      },
+      {
+        number: "02",
+        title: "Volume: The Contained Space",
+        description:
+          "Volume is the amount of space that an object occupies or encloses. While mass is about the material, volume is about the boundary. A balloon has a large volume but very little mass.",
+        bullets: [
+          {
+            term: 'The "Envelope"',
+            text: 'In architecture, the "volume" of a building is the total space defined by its walls, floor, and roof.',
+          },
+          {
+            term: "Interiority",
+            text: "Volume is what we experience when we step inside a room. We are standing within the volume created by the structure's mass.",
+          },
+        ],
+        accent: "sage-green",
+      },
+      {
+        number: "03",
+        title: "Void: The Power of Nothing",
+        description:
+          'Void is the "negative" space. It is the hole, the gap, or the deliberate absence of material within or around a mass. Don\'t let the name fool you — in design, a void is just as active and important as the solid parts.',
+        bullets: [
+          {
+            term: "Contrast",
+            text: "A void makes mass look lighter and more dynamic.",
+          },
+          {
+            term: "Movement",
+            text: "Voids act as pathways for light, air, and people.",
+          },
+          {
+            term: 'The "Carved" Effect',
+            text: "Think of a courtyard in the middle of a building; that is a strategic void carved out of a larger volume.",
+          },
+        ],
+        accent: "gold-glow",
+      },
+    ],
+    comparisonTable: {
+      headers: ["Concept", "Primary Focus", "Sensory Experience"],
+      rows: [
+        ["Mass", "Solid material", "Heaviness, strength, opacity"],
+        ["Volume", "Defined boundaries", "Spaciousness, containment"],
+        ["Void", "Empty space", "Lightness, flow, openness"],
+      ],
+    },
+    goldenRule:
+      "Great design isn't just about what you build (Mass); it's about the space you create (Volume) and the parts you leave empty (Void).",
+    endingQuote: {
+      quote: "Architecture is the learned game, correct and magnificent, of forms assembled in the light.",
+      author: "Le Corbusier",
+      image: "/assets/le_corbusier.png",
+    },
+    activities: {
+      quiz: {
+        title: "Knowledge Check",
+        questions: [
+          {
+            question:
+              'In architecture, what does "Mass" primarily refer to?',
+            options: [
+              "The empty space within a structure",
+              "The physical bulk of a solid body",
+              "The boundary defined by walls",
+              "The decorative elements on a facade",
+            ],
+            correctIndex: 1,
+            explanation:
+              'Mass refers to the physical bulk of a solid body — the "positive" space, the material itself.',
+          },
+          {
+            question:
+              "A courtyard carved out of the center of a building is an example of:",
+            options: ["Mass", "Volume", "Void", "Density"],
+            correctIndex: 2,
+            explanation:
+              "A courtyard is a strategic void — a deliberate absence of material carved out of a larger volume.",
+          },
+          {
+            question:
+              'What distinguishes "Volume" from "Mass" in architectural terms?',
+            options: [
+              "Volume is always heavier than mass",
+              "Volume is about the boundary and enclosed space, while mass is about the material",
+              "Volume only exists outdoors",
+              "There is no difference",
+            ],
+            correctIndex: 1,
+            explanation:
+              "Volume is about the total space defined by boundaries (walls, floor, roof), while mass is about the solid material itself.",
+          },
+        ],
+      },
+      matching: {
+        title: "Match the Concept",
+        pairs: [
+          {
+            concept: "Mass",
+            description: "Heaviness, strength, opacity",
+          },
+          {
+            concept: "Volume",
+            description: "Spaciousness, containment",
+          },
+          {
+            concept: "Void",
+            description: "Lightness, flow, openness",
+          },
+        ],
+      },
+      spotTheVoid: {
+        title: "Identify the Concepts",
+        instruction:
+          "For each architectural element below, decide whether it represents Mass, Volume, or Void.",
+        items: [
+          {
+            element: "A thick stone wall of a cathedral",
+            answer: "Mass",
+          },
+          {
+            element: "The domed interior space of the Pantheon",
+            answer: "Volume",
+          },
+          {
+            element: "An open archway connecting two halls",
+            answer: "Void",
+          },
+          {
+            element: "A solid marble column",
+            answer: "Mass",
+          },
+          {
+            element: "A window opening in a brick wall",
+            answer: "Void",
+          },
+          {
+            element: "The room inside a glass skyscraper floor",
+            answer: "Volume",
+          },
+        ],
+      },
+    },
+  },
+  {
+    id: "1.2",
+    tabLabel: "1.2 Spatial Organization",
+    heroSubtitle: "How spaces connect • organize • flow",
+    heroImage: "/assets/hawa_mahal.png",
+    moduleTitle: "Module 1: Design Theory & Spatial Literacy",
+    moduleSubtitle: "Foundations of how we perceive and organize space.",
+    chapterTitle: "Chapter 2: Spatial Organization",
+    chapterSubtitle: "Linear, radial, and clustered organizations of space.",
+    introVideos: [
+      {
+        title: "Spatial Terminology in Architecture",
+        url: "https://youtu.be/K7ZVoeSE0G0",
+      },
+      {
+        title: "Why Linear Cities Don't Work (5 Reasons)",
+        url: "https://youtu.be/yHRMcwQHicI",
+      },
+    ],
+    chapterVideos: [
+      {
+        title: "Spatial Transformations in Architecture",
+        url: "https://youtu.be/bKZLyjWjN08",
+      },
+      {
+        title: "Exploring Linear Design in Architecture",
+        url: "https://youtu.be/hqABAPxv4_0",
+      },
+    ],
+    chapterImage: "https://login.skillizee.io/s/articles/699ed2adf10a3d50038d674a/images/image-20260226132810-1.png",
+    introText:
+      "In architecture and design, Spatial Organization is the logic used to connect different rooms or areas. Understanding these three fundamental patterns — linear, radial, and clustered — will change how you see every building you walk into.",
+    concepts: [
+      {
+        number: "01",
+        title: "Linear Organization",
+        description:
+          "A Linear organization consists of a series of spaces arranged in a row. These spaces can be identical or vary in size, but they are always linked by a common line or path.",
+        bullets: [
+          {
+            term: "The Experience",
+            text: "It feels like a journey. It has a clear beginning, middle, and end.",
+          },
+          {
+            term: "Directionality",
+            text: 'It\'s great for directing movement and creating a sense of "progression."',
+          },
+          {
+            term: "Examples",
+            text: "A long hallway in a school, a traditional art gallery, or a row of shops on a street.",
+          },
+        ],
+        accent: "warm-clay",
+      },
+      {
+        number: "02",
+        title: "Radial Organization",
+        description:
+          'A Radial organization consists of a central, dominant space from which a number of linear organizations extend like "arms" or spokes of a wheel.',
+        bullets: [
+          {
+            term: "The Experience",
+            text: 'It feels like a hub. Everything revolves around a "heart" or a central focus point.',
+          },
+          {
+            term: "Hierarchy",
+            text: "The center is the most important part; the arms provide access to more private or specific areas.",
+          },
+          {
+            term: "Examples",
+            text: 'A prison (the "Panopticon" style), a large airport terminal where gates branch off a central lobby, or a starfish-shaped house.',
+          },
+        ],
+        accent: "sage-green",
+      },
+      {
+        number: "03",
+        title: "Clustered Organization",
+        description:
+          "A Clustered organization relies on physical proximity to relate its spaces to one another. It doesn't follow a strict geometry like a line or a circle; instead, spaces are grouped by function, size, or shape.",
+        bullets: [
+          {
+            term: "The Experience",
+            text: "It feels organic, like a village. It's flexible and can grow in any direction.",
+          },
+          {
+            term: "Connectivity",
+            text: 'Spaces are often linked by a "common" area or simply by touching one another.',
+          },
+          {
+            term: "Examples",
+            text: "A typical suburban neighborhood, an ancient stone village, or a collection of different buildings on a college campus.",
+          },
+        ],
+        accent: "gold-glow",
+      },
+    ],
+    comparisonTable: {
+      headers: ["Organization", "Best For...", "Main Vibe"],
+      rows: [
+        ["Linear", "Movement & Sequence", "The Journey"],
+        ["Radial", "Central Focus & Control", "The Hub"],
+        ["Clustered", "Flexibility & Growth", "The Village"],
+      ],
+    },
+    goldenRule:
+      "Next time you visit a building, ask: Is it a long series of rooms (Linear)? Does it have a main lobby with wings branching off (Radial)? Or is it a collection of different rooms tucked into corners (Clustered)?",
+    endingQuote: {
+      quote: "A room is not a room without natural light.",
+      author: "Louis Kahn",
+      image: "/assets/louis_kahn.png",
+    },
+    activities: {
+      quiz: {
+        title: "Knowledge Check",
+        questions: [
+          {
+            question: "Which spatial organization type feels like a journey with a clear beginning, middle, and end?",
+            options: ["Radial", "Linear", "Clustered", "Grid"],
+            correctIndex: 1,
+            explanation: "Linear organization arranges spaces in a row, creating a sense of progression and journey.",
+          },
+          {
+            question: 'What is the defining feature of a Radial organization?',
+            options: [
+              "Spaces arranged in a straight line",
+              "Spaces grouped by proximity",
+              "A central dominant space with arms extending outward",
+              "Spaces stacked vertically",
+            ],
+            correctIndex: 2,
+            explanation: 'Radial organization revolves around a central "hub" with linear arms extending outward like spokes.',
+          },
+          {
+            question: "Which organization type best describes an ancient stone village?",
+            options: ["Linear", "Radial", "Clustered", "Circular"],
+            correctIndex: 2,
+            explanation: "Villages grow organically with spaces grouped by proximity — a classic clustered organization.",
+          },
+        ],
+      },
+    },
+  },
+  {
+    id: "1.3",
+    tabLabel: "1.3 Human Scale",
+    heroSubtitle: "How your body shapes every building you enter",
+    heroImage: "/assets/human_scale_hero.png",
+    moduleTitle: "Module 1: Design Theory & Spatial Literacy",
+    moduleSubtitle: "Foundations of how we perceive and organize space.",
+    chapterTitle: "Chapter 3: Human Scale & Ergonomics",
+    chapterSubtitle: "Designing for the body; the \"Vitruvian\" standard vs. modern inclusivity.",
+    introVideos: [
+      {
+        title: "Why We Need Universal Design | TEDxBoulder",
+        url: "https://youtu.be/bVdPNWMGyZY",
+      },
+      {
+        title: "In Search of the Human Scale | Jan Gehl | TEDxKEA",
+        url: "https://youtu.be/Cgw9oHDfJ4k",
+      },
+    ],
+    chapterVideos: [
+      {
+        title: "The Vitruvian Man Explained",
+        url: "https://youtu.be/3jZfaCICtnU",
+      },
+      {
+        title: "Vitruvian Proportions in Architecture",
+        url: "https://youtu.be/kH8WwdAwNpM",
+      },
+      {
+        title: "Ergonomics in Modern Design",
+        url: "https://youtu.be/A88E4DH2asQ",
+      },
+    ],
+    chapterImage: "https://login.skillizee.io/s/articles/69a0154c2d84c655281cf3e2/images/image-20260226151134-1.png",
+    introText:
+      "Architecture is not just about big ideas; it's about the height of a step, the width of a doorway, and the reach of an arm. This chapter explores how the human body has shaped — and should shape — every building we enter.",
+    concepts: [
+      {
+        number: "01",
+        title: "Human Scale: The Measuring Stick",
+        description:
+          "Human Scale refers to the size of an object or space relative to the dimensions of a human being.",
+        bullets: [
+          {
+            term: "Intimate Scale",
+            text: "A small, low-ceilinged reading nook that makes you feel \"hugged.\"",
+          },
+          {
+            term: "Monumental Scale",
+            text: "A massive cathedral or a skyscraper lobby that makes you feel small and awestruck.",
+          },
+          {
+            term: "The \"Goldilocks\" Zone",
+            text: "Designing spaces that aren't so big they feel cold, nor so small they feel cramped.",
+          },
+        ],
+        accent: "warm-clay",
+      },
+      {
+        number: "02",
+        title: "The \"Vitruvian\" Standard: The Idealized Man",
+        description:
+          "For centuries, design was based on the Vitruvian Man (made famous by Leonardo da Vinci). This theory, proposed by the Roman architect Vitruvius, suggests that the human body is the ultimate model of symmetry and proportion.",
+        bullets: [
+          {
+            term: "Proportion is Perfection",
+            text: "The human body is the ultimate model of symmetry and proportion.",
+          },
+          {
+            term: "The \"Standard\" Body",
+            text: "Buildings were designed for a \"perfect,\" able-bodied, athletic male figure.",
+          },
+          {
+            term: "The Modulor",
+            text: "Le Corbusier created \"The Modulor,\" a scale of proportions based on a man with his arm raised (usually 183 cm or 6 feet tall).",
+          },
+        ],
+        accent: "sage-green",
+      },
+      {
+        number: "03",
+        title: "Modern Ergonomics & Inclusivity: Design for Everyone",
+        description:
+          "Today, the \"Vitruvian\" standard is seen as a limited starting point. Modern Ergonomics is the science of designing environments to fit the actual users, not just an \"ideal\" one.",
+        bullets: [
+          {
+            term: "The \"Average\" is a Myth",
+            text: "Humans come in all shapes, sizes, and abilities. Designing for the \"average\" person often means designing for no one perfectly.",
+          },
+          {
+            term: "Universal Design",
+            text: "Creating spaces usable by everyone — children, the elderly, wheelchair users, and people with sensory sensitivities — without adaptation.",
+          },
+          {
+            term: "Ergonomic \"Reach\"",
+            text: "An inclusive kitchen ensures the reach to a shelf or handle is accessible to someone sitting as well as someone standing.",
+          },
+        ],
+        accent: "gold-glow",
+      },
+    ],
+    comparisonTable: {
+      headers: ["The Old Standard (Vitruvian)", "The Modern Standard (Inclusive)"],
+      rows: [
+        ["Symmetry: Beauty is found in mathematical balance.", "Functionality: Beauty is found in ease of use."],
+        ["The \"Ideal\" Body: Designed for a 6ft tall, fit male.", "The \"Diverse\" Body: Designed for the 5th to 95th percentile of all humans."],
+        ["Exclusionary: Stairs are the primary focus.", "Accessible: Ramps and elevators are integrated into the core design."],
+      ],
+    },
+    goldenRule:
+      "Next time you sit at a desk, reach for a shelf, or walk through a doorway — ask: was this designed for someone like me? What about someone in a wheelchair? A child? That question is the heart of inclusive design.",
+    endingQuote: {
+      quote: "There are 360 degrees, so why stick to one?",
+      author: "Zaha Hadid",
+      image: "/assets/zaha_hadid.png",
+    },
+    activities: {
+      quiz: {
+        title: "Knowledge Check",
+        questions: [
+          {
+            question: "What does 'Human Scale' refer to in architecture?",
+            options: [
+              "The total square footage of a building",
+              "The size of a space relative to a human body",
+              "The number of floors in a building",
+              "The weight of building materials",
+            ],
+            correctIndex: 1,
+            explanation: "Human Scale measures how a space relates to the human body — intimate spaces feel cozy, monumental ones feel awe-inspiring.",
+          },
+          {
+            question: "What is the main limitation of the Vitruvian standard?",
+            options: [
+              "It uses metric measurements",
+              "It was designed for an idealized male body only",
+              "It only works for modern buildings",
+              "It ignores structural engineering",
+            ],
+            correctIndex: 1,
+            explanation: "The Vitruvian standard was based on a 'perfect' male body — excluding women, children, elderly, and people with disabilities.",
+          },
+          {
+            question: "What is Universal Design?",
+            options: [
+              "Using the same floor plan for all buildings",
+              "Making spaces usable by everyone without adaptation",
+              "Building only square rooms",
+              "Using universal measurements like meters",
+            ],
+            correctIndex: 1,
+            explanation: "Universal Design means creating spaces accessible to ALL people — regardless of age, size, or ability.",
+          },
+        ],
+      },
+    },
+  },
+  {
+    id: "1.4",
+    tabLabel: "1.4 Site Analysis",
+    heroSubtitle: "How climate, topography, and culture shape architecture",
+    heroImage: "/assets/site_analysis_hero.png",
+    moduleTitle: "Module 1: Design Theory & Spatial Literacy",
+    moduleSubtitle: "Foundations of how we perceive and organize space.",
+    chapterTitle: "Chapter 4: Site Analysis & Context",
+    chapterSubtitle: "How climate, topography, and culture dictate a building's \"DNA.\"",
+    introVideos: [],
+    chapterVideos: [],
+    chapterImage: "https://login.skillizee.io/s/articles/69a01f248b8d2e5aec219fef/images/image-20260226155335-1.png",
+    introText:
+      "A building does not exist in a vacuum; it is rooted in a specific place. Site Analysis is the process of studying the unique \"personality\" of a location to ensure the architecture belongs there. Chapter 4 is about its environment.",
+    concepts: [
+      {
+        number: "01",
+        title: "Climate: The Invisible Architect",
+        description:
+          "Climate is the most powerful force in determining a building's shape. Design should work with nature, not against it.",
+        bullets: [
+          {
+            term: "Sun Path",
+            text: "Architects map the sun's movement to decide where to place windows. In cold climates, you want \"passive solar gain\" (big south-facing windows); in hot climates, you need deep overhangs to provide shade.",
+          },
+          {
+            term: "Wind Patterns",
+            text: "Designing for cross-ventilation can reduce the need for air conditioning.",
+          },
+          {
+            term: "Precipitation",
+            text: "High rainfall often leads to pitched (sloped) roofs, while arid climates often feature flat roofs and thick walls to keep heat out.",
+          },
+        ],
+        accent: "warm-clay",
+      },
+      {
+        number: "02",
+        title: "Topography: The Shape of the Land",
+        description:
+          "Topography refers to the physical features of the land, specifically its \"slope\" and elevation.",
+        bullets: [
+          {
+            term: "\"Touch the Earth Lightly\"",
+            text: "Some architects use stilts or piers to leave the land undisturbed.",
+          },
+          {
+            term: "Earth-Sheltering",
+            text: "Building into a hill can provide natural insulation.",
+          },
+          {
+            term: "Contour Lines",
+            text: "Understanding the \"rise and run\" of the land prevents flooding and determines where the entrance should be.",
+          },
+        ],
+        accent: "sage-green",
+      },
+      {
+        number: "03",
+        title: "Culture & Context: The Social DNA",
+        description:
+          "Context isn't just physical; it's historical and social. A building should \"speak the language\" of its neighborhood.",
+        bullets: [
+          {
+            term: "Vernacular Architecture",
+            text: "\"Architecture without architects\" — buildings made by local people using local materials (like mud bricks in the desert or wood in the forest).",
+          },
+          {
+            term: "Materiality",
+            text: "Using local stone or timber makes a building feel like it grew out of the ground.",
+          },
+          {
+            term: "Zoning & History",
+            text: "The height, color, and style are often dictated by the \"character\" of the surrounding area to ensure the new building doesn't feel like an alien invader.",
+          },
+        ],
+        accent: "gold-glow",
+      },
+    ],
+    comparisonTable: {
+      headers: ["Factor", "Design Response"],
+      rows: [
+        ["Hot/Arid Climate", "Small windows, thick walls (thermal mass), courtyards."],
+        ["Steep Slope", "Terraced levels, balconies, or \"stilt\" foundations."],
+        ["Urban Context", "Vertical growth, soundproofing, high density."],
+        ["Rural Context", "Horizontal growth, connection to views, local materials."],
+      ],
+    },
+    goldenRule:
+      "Case Study — Fallingwater by Frank Lloyd Wright: Instead of building near the waterfall, Wright built the house over it. The house mimics natural rock ledges, uses stone quarried from the property, and the terraces let residents hear the water constantly — making the site part of the interior experience.",
+    slideshowEmbed: "https://www.slideshare.net/slideshow/embed_code/key/qR2TvYc6LzgJeR",
+    slideshowTitle: "Fallingwater — Frank Lloyd Wright Case Study",
+    endingQuote: {
+      quote: "Study nature, love nature, stay close to nature. It will never fail you.",
+      author: "Frank Lloyd Wright",
+      image: "/assets/frank_lloyd_wright.png",
+    },
+    activities: {
+      quiz: {
+        title: "Knowledge Check",
+        questions: [
+          {
+            question: "Why do architects map the sun's path across a site?",
+            options: [
+              "To decide the building's color",
+              "To determine optimal window placement for solar gain or shading",
+              "To calculate construction time",
+              "To estimate material costs",
+            ],
+            correctIndex: 1,
+            explanation: "Sun path analysis determines where to place windows — south-facing for warmth in cold climates, shaded overhangs in hot ones.",
+          },
+          {
+            question: "What is 'vernacular architecture'?",
+            options: [
+              "Buildings designed by famous architects",
+              "Buildings made by local people using local materials",
+              "Buildings that use only glass and steel",
+              "Any building over 100 years old",
+            ],
+            correctIndex: 1,
+            explanation: "Vernacular architecture is 'architecture without architects' — built by locals using materials native to the region.",
+          },
+          {
+            question: "What makes Fallingwater a masterpiece of site analysis?",
+            options: [
+              "It was the tallest building of its time",
+              "It was built directly over a waterfall, integrating with the natural landscape",
+              "It used only imported materials",
+              "It ignored the terrain completely",
+            ],
+            correctIndex: 1,
+            explanation: "Wright built Fallingwater over the waterfall, mimicking rock ledges with local stone — the ultimate response to site.",
+          },
+        ],
+      },
+    },
+  },
+  {
+    id: "1.5",
+    tabLabel: "Precedent Studies",
+    heroSubtitle: "Reverse-engineering the masterpieces of architecture",
+    heroImage: "/assets/precedent_studies_hero.png",
+    moduleTitle: "Module 1: Design Theory & Spatial Literacy",
+    moduleSubtitle: "Foundations of how we perceive and organize space.",
+    chapterTitle: "Chapter 5: Precedent Studies",
+    chapterSubtitle: "Learning the \"greats\" — analyzing iconic buildings to understand their logic.",
+    introVideos: [
+      {
+        title: "Villa Savoye — Le Corbusier's Five Points",
+        url: "https://youtu.be/JrORZbp_cG4",
+      },
+      {
+        title: "Barcelona Pavilion — Less is More",
+        url: "https://youtu.be/-gBql_ihoBQ",
+      },
+    ],
+    chapterVideos: [
+      {
+        title: "Salk Institute — The Power of Void",
+        url: "https://youtu.be/mQyi0NAaBls",
+      },
+    ],
+    introText:
+      "A Precedent Study isn't about looking at pretty pictures of famous buildings — it's about \"reverse-engineering\" them. We analyze the greats to understand the underlying logic, the structural solutions, and the spatial poetry they achieved. Think of it as a post-mortem for architecture: by studying why a building works, you gain a toolkit for your own designs.",
+    concepts: [
+      {
+        number: "01",
+        title: "The Why vs. The What",
+        description:
+          "When analyzing a precedent, we move past the surface level. The What says \"the building is made of glass and steel.\" The Why explains \"the glass dissolves the boundary between interior and forest, creating a sense of infinite volume.\"",
+        bullets: [
+          {
+            term: "Surface vs. Deep",
+            text: "Surface-level observation tells you materials; deep analysis reveals intent.",
+          },
+          {
+            term: "Intentional Design",
+            text: "Every design decision — from window size to wall thickness — has a reason.",
+          },
+          {
+            term: "Problem Solving",
+            text: "Architects don't just choose what looks good, they solve problems through form.",
+          },
+        ],
+      },
+      {
+        number: "02",
+        title: "The Concept (The \"Big Idea\")",
+        description:
+          "What was the architect trying to say? Is the building a \"machine for living,\" or is it meant to mimic a natural rock formation? In the Guggenheim Museum, Frank Lloyd Wright's concept was a continuous spiral ramp — an \"uninterrupted flow\" of art and movement.",
+        bullets: [
+          {
+            term: "Singular Vision",
+            text: "Every great building has a single, clear concept that drives all decisions.",
+          },
+          {
+            term: "One Sentence",
+            text: "The concept should be explainable in one sentence.",
+          },
+          {
+            term: "Concept Over Fashion",
+            text: "Form follows concept, not fashion.",
+          },
+        ],
+      },
+      {
+        number: "03",
+        title: "Circulation & Program",
+        description:
+          "How do people move through it? Where is the \"mass\" (solid rooms) versus the \"void\" (hallways, lobbies, atriums)? The relationship between served spaces and servant spaces defines spatial hierarchy.",
+        bullets: [
+          {
+            term: "Choreography",
+            text: "Circulation is the choreography of architecture — it scripts human movement.",
+          },
+          {
+            term: "Spatial DNA",
+            text: "Mass vs. void analysis reveals the building's spatial DNA.",
+          },
+          {
+            term: "Entry Sequence",
+            text: "Entry sequences shape the entire experience of a building.",
+          },
+        ],
+      },
+      {
+        number: "04",
+        title: "Structure & Materiality",
+        description:
+          "How does it stand up, and what does it feel like? Is the structure hidden inside walls, or is it expressed as part of the beauty? In the Pompidou Center, the 'guts' of the building — pipes, stairs, and ducts — are on the outside, leaving the interior completely open.",
+        bullets: [
+          {
+            term: "Hidden vs. Expressed",
+            text: "Structure can be hidden (conventional) or celebrated (expressed).",
+          },
+          {
+            term: "Material Language",
+            text: "Material choice communicates — concrete feels heavy, glass feels weightless.",
+          },
+          {
+            term: "Unity",
+            text: "The best buildings make structure and beauty inseparable.",
+          },
+        ],
+      },
+    ],
+    comparisonTable: {
+      headers: ["Building", "Architect", "Key Lesson"],
+      rows: [
+        [
+          "Villa Savoye",
+          "Le Corbusier",
+          "The \"Five Points of Architecture\" — Pilotis, Roof Garden, Free Plan, Horizontal Windows, Free Facade.",
+        ],
+        [
+          "Barcelona Pavilion",
+          "Mies van der Rohe",
+          "\"Less is More.\" How thin planes and precious materials can define space without enclosing it.",
+        ],
+        [
+          "Salk Institute",
+          "Louis Kahn",
+          "The power of symmetry and the use of \"void\" — the central courtyard framing the horizon.",
+        ],
+      ],
+    },
+    goldenRule:
+      "How to Conduct Your Own Precedent Study: (1) Sketch the Plan — drawing forces your brain to notice wall thickness and door logic. (2) Sectional Analysis — a 'slice' of the building shows volume heights and how light enters. (3) Diagramming — use arrows for movement and circles for activity hubs. Remember: the space within became the reality of the building.",
+    endingQuote: {
+      quote: "Less is more.",
+      author: "Mies van der Rohe",
+      image: "/assets/mies_van_der_rohe.png",
+    },
+    activities: {
+      quiz: {
+        title: "Knowledge Check",
+        questions: [
+          {
+            question:
+              "What is the difference between 'The What' and 'The Why' in precedent analysis?",
+            options: [
+              "The What describes the color; The Why describes the cost",
+              "The What describes materials; The Why explains the design intent behind those choices",
+              "The What is about structure; The Why is about decoration",
+              "There is no difference",
+            ],
+            correctIndex: 1,
+            explanation:
+              "Surface-level observation (The What) tells you facts. Deep analysis (The Why) reveals the architect's intent and reasoning.",
+          },
+          {
+            question:
+              "Why did the Pompidou Center place its structure and services on the outside?",
+            options: [
+              "To save money on construction",
+              "Because the architect made a mistake",
+              "To leave the interior volume completely open and flexible for exhibitions",
+              "Because there was no room inside",
+            ],
+            correctIndex: 2,
+            explanation:
+              "By externalizing structure and services, Rogers and Piano created the largest possible uninterrupted interior floor plates.",
+          },
+          {
+            question:
+              "What is the first step in conducting your own precedent study?",
+            options: [
+              "Take photographs",
+              "Sketch the plan — drawing forces you to notice wall thickness and door logic",
+              "Read the Wikipedia article",
+              "Visit the building in person",
+            ],
+            correctIndex: 1,
+            explanation:
+              "Sketching by hand forces engagement with spatial relationships that passive viewing misses.",
+          },
+        ],
+      },
+    },
+  },
+];
+
+export default chaptersData;
