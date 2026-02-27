@@ -821,6 +821,7 @@ const chaptersData = [
   },
   {
     id: "2.1",
+    tabLabel: "2.1 Orthographic",
     locked: false,
     moduleTitle: "Module 2: Technical Foundations",
     moduleSubtitle: "The Language of Builders",
@@ -926,6 +927,7 @@ const chaptersData = [
   },
   {
     id: "2.2",
+    tabLabel: "2.2 Perspective",
     locked: false,
     moduleTitle: "Module 2: Technical Foundations",
     moduleSubtitle: "The Language of Builders",
@@ -1046,6 +1048,7 @@ const chaptersData = [
   },
   {
     id: "2.3",
+    tabLabel: "2.3 Digital Modeling",
     locked: false,
     moduleTitle: "Module 2: Technical Foundations",
     moduleSubtitle: "From Board to Screen",
