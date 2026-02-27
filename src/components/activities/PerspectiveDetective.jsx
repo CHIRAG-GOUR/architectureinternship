@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ScrollReveal from "../ScrollReveal";
 
 // Image options for the detective game
 const CASES = [
@@ -56,7 +57,7 @@ export default function PerspectiveDetective() {
 
     return (
         <div className="section-gap">
-            <div className="content-card" style={{ padding: "2rem", background: "#fdfbf7" }}>
+            <ScrollReveal className="content-card">
                 <h3 style={{ color: "#5c4033", marginBottom: "0.5rem" }}>Perspective Detective</h3>
                 <p style={{ color: "#8b7355", fontSize: "0.95rem", marginBottom: "1.5rem" }}>
                     Analyze the architectural photograph below. Identify which type of perspective it represents.
@@ -144,7 +145,7 @@ export default function PerspectiveDetective() {
                         )}
                     </div>
                 </div>
-            </div>
+            </ScrollReveal>
         </div>
     );
 }
