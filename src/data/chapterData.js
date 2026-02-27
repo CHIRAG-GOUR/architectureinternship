@@ -590,8 +590,6 @@ const chaptersData = [
     },
     goldenRule:
       "Case Study — Fallingwater by Frank Lloyd Wright: Instead of building near the waterfall, Wright built the house over it. The house mimics natural rock ledges, uses stone quarried from the property, and the terraces let residents hear the water constantly — making the site part of the interior experience.",
-    slideshowEmbed: "https://www.slideshare.net/slideshow/embed_code/key/qR2TvYc6LzgJeR",
-    slideshowTitle: "Fallingwater — Frank Lloyd Wright Case Study",
     endingQuote: {
       quote: "Study nature, love nature, stay close to nature. It will never fail you.",
       author: "Frank Lloyd Wright",

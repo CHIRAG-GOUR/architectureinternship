@@ -220,26 +220,6 @@ function ChapterPage({ chapter }) {
         </div>
       )}
 
-      {/* SLIDESHOW EMBED — if present */}
-      {chapter.slideshowEmbed && (
-        <div className="section-gap">
-          <ScrollReveal className="heading-card">
-            <h2>📑 Case Study Slideshow</h2>
-            <p className="subtitle">{chapter.slideshowTitle || "Visual reference material"}</p>
-          </ScrollReveal>
-          <ScrollReveal className="content-card" delay={200}>
-            <div style={{ position: "relative", width: "100%", paddingTop: "82%", borderRadius: 10, overflow: "hidden" }}>
-              <iframe
-                src={chapter.slideshowEmbed}
-                style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: "1px solid #ddd", borderRadius: 10 }}
-                scrolling="yes"
-                allowFullScreen
-                title={chapter.slideshowTitle || "Case Study Slideshow"}
-              />
-            </div>
-          </ScrollReveal>
-        </div>
-      )}
 
       {/* CHAPTER VIDEOS — only show if there are videos */}
       {chapter.chapterVideos?.length > 0 && (
@@ -292,19 +272,19 @@ function ChapterPage({ chapter }) {
         <div className="section-gap">
           <ScrollReveal className="content-card" delay={100}>
             <div style={{ textAlign: "center", padding: "2rem 1.5rem" }}>
-              {chapter.endingQuote.image && (
-                <img
-                  src={chapter.endingQuote.image}
-                  alt={chapter.endingQuote.author}
-                  style={{ width: 72, height: 72, borderRadius: "50%", objectFit: "cover", border: "3px solid #c9a96e", marginBottom: "1rem" }}
-                />
-              )}
               <p style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(1.2rem, 2.5vw, 1.7rem)", color: "#5c4033", lineHeight: 1.7, fontStyle: "italic" }}>
                 "{chapter.endingQuote.quote}"
               </p>
               <p style={{ fontSize: "0.95rem", color: "#c9a96e", fontWeight: 700, marginTop: "1rem", letterSpacing: "0.05em" }}>
                 — {chapter.endingQuote.author}
               </p>
+              {chapter.endingQuote.image && (
+                <img
+                  src={chapter.endingQuote.image}
+                  alt={chapter.endingQuote.author}
+                  style={{ width: 96, height: 96, borderRadius: "50%", objectFit: "cover", border: "3px solid #c9a96e", marginTop: "1rem", display: "block", marginLeft: "auto", marginRight: "auto" }}
+                />
+              )}
               <div style={{ marginTop: "1rem", display: "flex", justifyContent: "center", gap: 6 }}>
                 <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#c9a96e" }} />
                 <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#c9a96e40" }} />
