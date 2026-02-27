@@ -3,6 +3,7 @@ import { HashRouter, Routes, Route, useParams, useNavigate } from "react-router-
 import "./index.css";
 
 import ThreeBackground from "./components/ThreeBackground";
+import BlueprintBackground from "./components/BlueprintBackground";
 import HeroSection from "./components/HeroSection";
 import ScrollReveal from "./components/ScrollReveal";
 import ConceptSection from "./components/ConceptSection";
@@ -33,6 +34,11 @@ import TerrainBuilder from "./components/activities/TerrainBuilder";
 import BuildingAutopsy from "./components/activities/BuildingAutopsy";
 import AIPrecedentAnalyzer from "./components/activities/AIPrecedentAnalyzer";
 
+/* Chapter 2.1 activities */
+import OrthographicSlicer from "./components/activities/OrthographicSlicer";
+import LineWeightStudio from "./components/activities/LineWeightStudio";
+import ProjectionPuzzle from "./components/activities/ProjectionPuzzle";
+
 import chaptersData from "./data/chapterData";
 
 /* ── Chapter-specific activity mappings ── */
@@ -42,6 +48,7 @@ const CHAPTER_ACTIVITIES = {
   "1.3": [ScaleExplorer3D, InclusiveDesignSim],
   "1.4": [SunPathSimulator, TerrainBuilder],
   "1.5": [BuildingAutopsy, AIPrecedentAnalyzer],
+  "2.1": [OrthographicSlicer, LineWeightStudio, ProjectionPuzzle],
 };
 
 /* ── Mouse tilt on content cards ── */
@@ -363,6 +370,15 @@ function HomePage() {
   );
 }
 
+/* ── Background Manager ── */
+import { useLocation } from "react-router-dom";
+function BackgroundManager() {
+  const location = useLocation();
+  // If we are in chapter 2.x, show BlueprintBackground. Otherwise show ThreeBackground (Module 1).
+  const isModule2 = location.pathname.includes("/chapter/2.");
+  return isModule2 ? <BlueprintBackground /> : <ThreeBackground />;
+}
+
 /* ── Main App with routing ── */
 export default function App() {
   useTilt();
@@ -370,7 +386,7 @@ export default function App() {
   return (
     <HashRouter>
       <div style={{ minHeight: "100vh", position: "relative" }}>
-        <ThreeBackground />
+        <BackgroundManager />
         <TopProgressBar />
         <FullscreenToggle />
         <ZigzagProgress />

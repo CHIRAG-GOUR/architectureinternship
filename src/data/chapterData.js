@@ -819,6 +819,111 @@ const chaptersData = [
       },
     },
   },
+  {
+    id: "2.1",
+    locked: false,
+    moduleTitle: "Module 2: Technical Foundations",
+    moduleSubtitle: "The Language of Builders",
+    chapterTitle: "Orthographic Projection",
+    chapterSubtitle: "Mastering plans, sections, and elevations.",
+    heroImage: "/assets/orthographic_hero.png",
+    introText:
+      "Since you've mastered the conceptual language of form, space, and site, we now move into Technical Foundations. Orthographic Projection is the universal language of builders and designers. It is a way of representing a three-dimensional object in two dimensions by 'flattening' it onto a series of planes. Imagine a glass box around an object; orthographic projection is what you see when you look perfectly straight at each face of that box.",
+    introVideos: [
+      {
+        title: "What is orthographic, oblique, axonometric or perspective projection?",
+        url: "https://youtu.be/-J1cSzfl4mk?t=49",
+      },
+    ],
+    chapterVectors: [],
+    chapterImage: "",
+    chapterVideos: [
+      {
+        title: "Understanding Orthographic Drawings",
+        url: "https://youtu.be/heIobpUVZqc",
+      }
+    ],
+    concepts: [
+      {
+        title: "1. The Floor Plan: The Horizontal Cut",
+        description:
+          "A Floor Plan is a horizontal section cut taken at approximately 4 feet (1.2 meters) above the floor. It looks straight down.",
+        bullets: [
+          "What it shows: Room layouts, wall thicknesses, door swings, and window locations.",
+          "The Logic: Walls that are 'cut' are drawn with thicker lines (often 'hatched' or filled in), while things below the cut line (like furniture or floor patterns) are drawn with thin lines.",
+        ],
+      },
+      {
+        title: "2. The Section: The Vertical Slice",
+        description:
+          "A Section is a vertical cut through the building. Imagine slicing a cake to see the layers inside.",
+        bullets: [
+          "What it shows: Ceiling heights, the relationship between different floors, and how the 'Mass' of the roof sits on the 'Volume' of the rooms.",
+          "The Logic: It reveals the 'thickness' of the floors and the 'voids' of the stairs. It is the best way to understand the scale of a space relative to a person.",
+        ],
+      },
+      {
+        title: "3. The Elevation: The External Face",
+        description:
+          "An Elevation is a view of one side of the building without any cutting. It is a flat, 2D representation of the exterior 'skin.'",
+        bullets: [
+          "What it shows: Exterior materials (stone, glass, wood), the height of windows, and the overall 'Massing' of the building from the outside.",
+          "The Logic: Unlike a photograph, there is no perspective in an elevation. A window at the far end of the wall is drawn the exact same size as a window right in front of you.",
+        ],
+      },
+    ],
+    comparisonTable: {
+      title: "The Orthographic 'Set'",
+      headers: ["View Type", "Direction", "Main Purpose"],
+      rows: [
+        ["Plan", "Top-Down (Cut)", "Flow, Layout, & Dimensions"],
+        ["Section", "Side-View (Cut)", "Height, Structure, & Volume"],
+        ["Elevation", "Side-View (Uncut)", "Appearance, Material, & Context"],
+      ],
+    },
+    goldenRule:
+      "Pro-Tip: Line Weights. In orthographic drawing, Line Weight is your best friend. Heavy Lines: Used for objects being cut. Medium Lines: Used for the outlines of objects. Light/Dashed Lines: Used for details, textures, or things hidden above the cut line.",
+    endingQuote: {
+      quote: "To sketch is to plant a seed in the ground. To draft is to build the machine that grows it.",
+      author: "Rem Koolhaas",
+      image: "/assets/rem_koolhaas.png",
+    },
+    activities: {
+      quiz: {
+        title: "Knowledge Check",
+        questions: [
+          {
+            question: "At what approximate height is a floor plan cut taken?",
+            options: [
+              "Ground level",
+              "4 feet (1.2 meters)",
+              "Ceiling height",
+              "8 feet (2.4 meters)"
+            ],
+            correctIndex: 1,
+            explanation: "Floor plans are cut around 4 feet to clearly show the locations of windows, doors, and walls before reaching the ceiling line.",
+          },
+          {
+            question: "Which drawing type is best for understanding ceiling heights and the relationship between different floors?",
+            options: ["Elevation", "Floor Plan", "Section", "Site Plan"],
+            correctIndex: 2,
+            explanation: "A section slices the building vertically, perfectly revealing heights, floor thicknesses, and stair voids.",
+          },
+          {
+            question: "When drawing an orthographic floor plan, what should be drawn with the heaviest/thickest lines?",
+            options: [
+              "Furniture and floor tiles",
+              "Wall boundaries that are intersected by the cut plane",
+              "Windows and doors",
+              "Objects located above the cut plane"
+            ],
+            correctIndex: 1,
+            explanation: "Objects that are actively intersected by the cut plane (like walls) use very thick line weights or solid fill ('poche') to emphasize the cut.",
+          }
+        ],
+      },
+    },
+  }
 ];
 
 export default chaptersData;
