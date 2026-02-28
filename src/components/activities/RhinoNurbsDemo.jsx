@@ -2,8 +2,9 @@ import { useState, useRef, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, TorusKnot, Edges, OrthographicCamera, PerspectiveCamera, Environment } from "@react-three/drei";
 import ScrollReveal from "../ScrollReveal";
+import html2canvas from "html2canvas";
 
-const RhinoViewport = ({ type, p, q, tube, tubularSegments }) => {
+const RhinoViewport = ({ type, p, q, tube, tubularSegments, activeGeometry }) => {
     return (
         <div style={{ position: "relative", width: "100%", height: "100%", border: "1px solid #333", background: "#1e1e1e" }}>
             {/* Viewport Label */}
@@ -11,7 +12,7 @@ const RhinoViewport = ({ type, p, q, tube, tubularSegments }) => {
                 {type}
             </div>
 
-            <Canvas>
+            <Canvas gl={{ preserveDrawingBuffer: true }}>
                 <ambientLight intensity={1} />
                 <directionalLight position={[10, 10, 10]} intensity={2} />
                 <directionalLight position={[-10, -10, -10]} intensity={1} color="#c9a96e" />
@@ -22,16 +23,33 @@ const RhinoViewport = ({ type, p, q, tube, tubularSegments }) => {
                 {type === "Right" && <OrthographicCamera makeDefault position={[20, 0, 0]} zoom={40} near={0.1} far={100} />}
                 {type === "Perspective" && <PerspectiveCamera makeDefault position={[8, 8, 8]} fov={45} />}
 
-                <TorusKnot args={[2, tube, tubularSegments, 32, p, q]}>
-                    <meshPhysicalMaterial
-                        color="#e0e0e0"
-                        metalness={0.9}
-                        roughness={0.1}
-                        clearcoat={1}
-                        envMapIntensity={2}
-                    />
-                    <Edges scale={1.0} color="#00ff00" threshold={15} />
-                </TorusKnot>
+                {activeGeometry === "TorusKnot" && (
+                    <TorusKnot args={[2, tube, tubularSegments, 32, p, q]}>
+                        <meshPhysicalMaterial color="#e0e0e0" metalness={0.9} roughness={0.1} clearcoat={1} envMapIntensity={2} />
+                        <Edges scale={1.0} color="#00ff00" threshold={15} />
+                    </TorusKnot>
+                )}
+                {activeGeometry === "Box" && (
+                    <mesh>
+                        <boxGeometry args={[4, 4, 4]} />
+                        <meshPhysicalMaterial color="#e0e0e0" metalness={0.9} roughness={0.1} clearcoat={1} envMapIntensity={2} />
+                        <Edges scale={1.0} color="#00ff00" threshold={15} />
+                    </mesh>
+                )}
+                {activeGeometry === "Sphere" && (
+                    <mesh>
+                        <sphereGeometry args={[3, 32, 32]} />
+                        <meshPhysicalMaterial color="#e0e0e0" metalness={0.9} roughness={0.1} clearcoat={1} envMapIntensity={2} />
+                        <Edges scale={1.0} color="#00ff00" threshold={15} />
+                    </mesh>
+                )}
+                {activeGeometry === "Plane" && (
+                    <mesh rotation={[-Math.PI / 2, 0, 0]}>
+                        <planeGeometry args={[8, 8, 10, 10]} />
+                        <meshPhysicalMaterial color="#e0e0e0" metalness={0.9} roughness={0.1} clearcoat={1} envMapIntensity={2} />
+                        <Edges scale={1.0} color="#00ff00" threshold={15} />
+                    </mesh>
+                )}
 
                 {/* Only orbit in Perspective, pan in Ortho */}
                 <OrbitControls
@@ -55,7 +73,24 @@ export default function RhinoNurbsDemo() {
     const [q, setQ] = useState(3);
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [commandText, setCommandText] = useState("_TorusKnot");
+    const [activeGeometry, setActiveGeometry] = useState("TorusKnot");
     const containerRef = useRef(null);
+
+    const exportViewport = async () => {
+        setCommandText("Capturing 4-viewport layout...");
+        if (containerRef.current) {
+            const canvasGrid = containerRef.current.querySelector('.rhino-viewport-grid');
+            if (canvasGrid) {
+                const canvas = await html2canvas(canvasGrid, { backgroundColor: "#111" });
+                const url = canvas.toDataURL("image/png");
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = "rhino_export.png";
+                a.click();
+                setCommandText("Command: _Export Image saved.");
+            }
+        }
+    };
 
     const toggleFullscreen = () => {
         if (!document.fullscreenElement) {
@@ -132,7 +167,9 @@ export default function RhinoNurbsDemo() {
                         <MenuOption label="Dimension" />
                         <MenuOption label="Transform" />
                         <MenuOption label="Tools" />
-                        <div style={{ flex: 1 }}></div>
+                        <button onClick={exportViewport} style={{ background: "#444", color: "white", border: "1px solid #555", padding: "2px 10px", borderRadius: "2px", cursor: "pointer", fontSize: "11px" }}>
+                            Export View
+                        </button>
                         <button onClick={toggleFullscreen} style={{ background: "#444", color: "white", border: "1px solid #555", padding: "2px 10px", borderRadius: "2px", cursor: "pointer", fontSize: "11px" }}>
                             {isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
                         </button>
@@ -148,11 +185,11 @@ export default function RhinoNurbsDemo() {
                         {/* Side Toolbar */}
                         <div style={{ width: 40, background: "#2a2a2a", borderRight: "1px solid #111", display: "flex", flexDirection: "column", alignItems: "center", padding: "8px 0", gap: "4px" }}>
                             <ToolbarIcon icon="↖️" active={true} onClick={() => setCommandText("Cancel")} />
-                            <ToolbarIcon icon="⚫" onClick={() => setCommandText("_Point")} />
+                            <ToolbarIcon icon="⚫" onClick={() => { setActiveGeometry("Sphere"); setCommandText("_Sphere"); }} />
                             <ToolbarIcon icon="〰️" onClick={() => setCommandText("_Polyline")} />
-                            <ToolbarIcon icon="🟩" onClick={() => setCommandText("_Plane")} />
-                            <ToolbarIcon icon="🟦" onClick={() => setCommandText("_Box")} />
-                            <ToolbarIcon icon="🧊" onClick={() => setCommandText("_ExtrudeSrf")} />
+                            <ToolbarIcon icon="🟩" onClick={() => { setActiveGeometry("Plane"); setCommandText("_Plane"); }} />
+                            <ToolbarIcon icon="🟦" onClick={() => { setActiveGeometry("Box"); setCommandText("_Box"); }} />
+                            <ToolbarIcon icon="🍩" onClick={() => { setActiveGeometry("TorusKnot"); setCommandText("_TorusKnot"); }} />
                             <ToolbarIcon icon="✂️" onClick={() => setCommandText("_Trim")} />
                             <div style={{ margin: "4px 0", width: "80%", height: "1px", background: "#444" }}></div>
                             <ToolbarIcon icon="🔄" onClick={() => setCommandText("_Rotate")} />
@@ -160,11 +197,11 @@ export default function RhinoNurbsDemo() {
                         </div>
 
                         {/* 4-Viewport Grid */}
-                        <div style={{ flex: 1, display: "grid", gridTemplateColumns: "1fr 1fr", gridTemplateRows: "1fr 1fr", gap: "2px", background: "#111", padding: "2px" }}>
-                            <RhinoViewport type="Top" p={p} q={q} tube={tube} tubularSegments={tubularSegments} />
-                            <RhinoViewport type="Perspective" p={p} q={q} tube={tube} tubularSegments={tubularSegments} />
-                            <RhinoViewport type="Front" p={p} q={q} tube={tube} tubularSegments={tubularSegments} />
-                            <RhinoViewport type="Right" p={p} q={q} tube={tube} tubularSegments={tubularSegments} />
+                        <div className="rhino-viewport-grid" style={{ flex: 1, display: "grid", gridTemplateColumns: "1fr 1fr", gridTemplateRows: "1fr 1fr", gap: "2px", background: "#111", padding: "2px" }}>
+                            <RhinoViewport type="Top" activeGeometry={activeGeometry} p={p} q={q} tube={tube} tubularSegments={tubularSegments} />
+                            <RhinoViewport type="Perspective" activeGeometry={activeGeometry} p={p} q={q} tube={tube} tubularSegments={tubularSegments} />
+                            <RhinoViewport type="Front" activeGeometry={activeGeometry} p={p} q={q} tube={tube} tubularSegments={tubularSegments} />
+                            <RhinoViewport type="Right" activeGeometry={activeGeometry} p={p} q={q} tube={tube} tubularSegments={tubularSegments} />
                         </div>
 
                         {/* Parametric Properties Panel */}
@@ -196,7 +233,7 @@ export default function RhinoNurbsDemo() {
 
                             <div style={{ marginTop: "auto", padding: "8px", background: "#1e1e1e", borderRadius: "4px" }}>
                                 <div style={{ color: "#aaa", marginBottom: "4px" }}>Object Type:</div>
-                                <div>Closed NURBS Surface</div>
+                                <div>{activeGeometry}</div>
                             </div>
                         </div>
                     </div>

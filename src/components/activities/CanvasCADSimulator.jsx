@@ -16,6 +16,7 @@ export default function CanvasCADSimulator() {
     const [scale, setScale] = useState(1);
     const [isPanning, setIsPanning] = useState(false);
     const [lastMouse, setLastMouse] = useState({ x: 0, y: 0 });
+    const [mouseWorld, setMouseWorld] = useState(null); // Track mouse in CAD world coordinates for preview
 
     const toggleFullscreen = () => {
         if (!document.fullscreenElement) {
@@ -95,6 +96,18 @@ export default function CanvasCADSimulator() {
             ctx.stroke();
         });
 
+        // Draw preview line if waiting for P2
+        if (state === "WAIT_P2" && p1 && mouseWorld) {
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 1 / scale;
+            ctx.setLineDash([5 / scale, 5 / scale]);
+            ctx.beginPath();
+            ctx.moveTo(p1.x, -p1.y);
+            ctx.lineTo(mouseWorld.x, -mouseWorld.y);
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+
         // Draw axis lines (UCS icon mapping)
         ctx.strokeStyle = "#ff0000"; // X red
         ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(100, 0); ctx.stroke();
@@ -168,13 +181,44 @@ export default function CanvasCADSimulator() {
     };
 
     const handleMouseDown = (e) => {
-        if (e.button === 1 || e.button === 2) { // Middle click or Right click pan
+        const rect = canvasRef.current.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+
+        const w = canvasRef.current.width;
+        const h = canvasRef.current.height;
+        const worldX = (mouseX - w / 2 - offset.x) / scale;
+        const worldY = -(mouseY - h / 2 - offset.y) / scale; // Y inverted
+
+        if (e.button === 1 || e.button === 2) { // Middle or Right click pan
             setIsPanning(true);
             setLastMouse({ x: e.clientX, y: e.clientY });
+        } else if (e.button === 0) { // Left click
+            if (state === "WAIT_P1") {
+                setP1({ x: worldX, y: worldY });
+                setState("WAIT_P2");
+                setCommandLog(prev => [...prev.slice(-7), `Point: ${worldX.toFixed(1)}, ${worldY.toFixed(1)}`, "Specify next point or [Undo]:"]);
+            } else if (state === "WAIT_P2") {
+                const p2 = { x: worldX, y: worldY };
+                setLines(prev => [...prev, { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y }]);
+                setP1(p2);
+                setCommandLog(prev => [...prev.slice(-7), `Point: ${p2.x.toFixed(1)}, ${p2.y.toFixed(1)}`, "Specify next point or [Undo]:"]);
+            }
         }
     };
 
     const handleMouseMove = (e) => {
+        const rect = canvasRef.current.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+
+        const w = canvasRef.current.width;
+        const h = canvasRef.current.height;
+        const worldX = (mouseX - w / 2 - offset.x) / scale;
+        const worldY = -(mouseY - h / 2 - offset.y) / scale;
+
+        setMouseWorld({ x: worldX, y: worldY });
+
         if (isPanning) {
             const dx = e.clientX - lastMouse.x;
             const dy = e.clientY - lastMouse.y;
@@ -262,7 +306,16 @@ export default function CanvasCADSimulator() {
                             </div>
                             <div style={{ display: "flex", gap: "4px" }}>
                                 <RibbonButton icon="🔍" label="Zoom Extents" onClick={() => { setCurrentInput("Z"); handleCommand({ key: "Enter" }); }} />
-                                <RibbonButton icon="💾" label="Save" onClick={() => { setCommandLog(prev => [...prev.slice(-7), "Drawing saved to Web Storage."]); }} />
+                                <RibbonButton icon="💾" label="Save & Export" onClick={() => {
+                                    if (canvasRef.current) {
+                                        const url = canvasRef.current.toDataURL("image/png");
+                                        const a = document.createElement('a');
+                                        a.href = url;
+                                        a.download = 'autocad_drawing.png';
+                                        a.click();
+                                        setCommandLog(prev => [...prev.slice(-7), "Command: EXPORT - PNG saved locally."]);
+                                    }
+                                }} />
                             </div>
                         </div>
                     </div>

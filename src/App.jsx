@@ -65,7 +65,7 @@ const CHAPTER_ACTIVITIES = {
   "2.1": [OrthographicSlicer, LineWeightStudio, ProjectionPuzzle],
   "2.2": [TheVanishingPoint, IsometricExtruder, PerspectiveDetective],
   "2.3": [CanvasCADSimulator, RhinoNurbsDemo, RevitBimInspector],
-  "5": [ExplodedAxonometric, AtmosphereDirector],
+  "2.5": [ExplodedAxonometric, AtmosphereDirector],
 };
 
 /* ── Mouse tilt on content cards ── */
@@ -409,7 +409,7 @@ function BackgroundManager() {
       BackgroundComponent = IsometricBackground;
     } else if (chapterId === "2.3") {
       BackgroundComponent = DetailedArchitectMapBackground;
-    } else if (chapterId === "5") {
+    } else if (chapterId === "2.5") {
       BackgroundComponent = PortfolioBackground;
     }
   }

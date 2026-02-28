@@ -1054,7 +1054,7 @@ const chaptersData = [
     moduleSubtitle: "From Board to Screen",
     chapterTitle: "Chapter 3: Digital Modeling (BIM/CAD)",
     chapterSubtitle: "Intro to industry-standard tools like Revit, Rhino, or AutoCAD.",
-    heroImage: "/assets/digital_bim_hero_2_3.png",
+    heroImage: "/assets/kumbhalgarh_hero.png",
     introText:
       "We transition from the drafting board to the digital workspace. In the modern industry, we no longer just 'draw' buildings; we build them virtually. This shift is defined by two distinct philosophies: CAD (Computer-Aided Design) and BIM (Building Information Modeling).",
     introVideos: [
@@ -1158,12 +1158,12 @@ const chaptersData = [
     },
   },
   {
-    id: "5",
-    tabLabel: "5. Portfolio Storytelling",
+    id: "2.5",
+    tabLabel: "2.5. Portfolio Storytelling",
     locked: false,
-    moduleTitle: "Module 5: Portfolio & Presentation",
+    moduleTitle: "Module 2: The Design Process",
     moduleSubtitle: "Curating a visual narrative of a design process.",
-    chapterTitle: "Chapter 5: Portfolio Storytelling",
+    chapterTitle: "Chapter 2.5: Portfolio Storytelling",
     chapterSubtitle: "Curating a visual narrative of a design process.",
     heroImage: "/assets/ch1_2_hero.jpg",
     introText: "In architecture, a portfolio is more than a catalog of buildings; it is a document of your spatial intelligence. While a graphic designer might focus on a screen, an architect must narrate the transition from a 2D concept to a 3D reality, considering site, light, and human scale.",

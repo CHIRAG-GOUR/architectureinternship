@@ -36,14 +36,40 @@ const BIM_DATA = {
         structural: "No",
         width: "0.900 m",
         height: "2.100 m"
+    },
+    column: {
+        category: "Structural Column",
+        type: "Concrete Round - 300mm",
+        cost: "$120 / unit",
+        fireRating: "4 Hours",
+        thermalResistance: "N/A",
+        manufacturer: "In-situ",
+        structural: "Yes"
+    },
+    roof: {
+        category: "Basic Roof",
+        type: "Generic - Flat 400mm",
+        cost: "$180 / sq.m",
+        fireRating: "2 Hours",
+        thermalResistance: "R-30",
+        manufacturer: "Generic Construction",
+        structural: "Yes"
     }
 };
 
+const initialElements = [
+    { id: '1', type: 'wall', position: [0, 1, 0] },
+    { id: '2', type: 'window', position: [-0.8, 1.2, 0.05] },
+    { id: '3', type: 'door', position: [1, 0.5, 0.05] }
+];
+
 export default function RevitBimInspector() {
+    const [elements, setElements] = useState(initialElements);
     const [selectedObject, setSelectedObject] = useState(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [activeTab, setActiveTab] = useState("Architecture");
     const [statusMessage, setStatusMessage] = useState("Ready");
+    const [placementMode, setPlacementMode] = useState(null);
     const containerRef = useRef(null);
 
     const toggleFullscreen = () => {
@@ -75,8 +101,40 @@ export default function RevitBimInspector() {
     };
 
     const triggerTool = (toolName) => {
-        setStatusMessage(`Command active: Place ${toolName}. Click in the 3D view to place.`);
-        setTimeout(() => setStatusMessage("Ready"), 3000);
+        setPlacementMode(toolName.toLowerCase());
+        setStatusMessage(`Command active: Place ${toolName}. Click on the grid to place.`);
+    };
+
+    const handleGridClick = (e) => {
+        if (!placementMode) {
+            handleDeselect();
+            return;
+        }
+        const { x, z } = e.point;
+        let yPos = 0;
+        if (placementMode === 'wall') yPos = 1;
+        if (placementMode === 'door') yPos = 0.5;
+        if (placementMode === 'window') yPos = 1.2;
+        if (placementMode === 'column') yPos = 1.5;
+        if (placementMode === 'roof') yPos = 2.5;
+        if (placementMode === 'floor') yPos = 0;
+
+        const newEl = { id: Date.now().toString(), type: placementMode, position: [x, yPos, z] };
+        setElements([...elements, newEl]);
+        setStatusMessage(`Placed ${placementMode}.`);
+        setPlacementMode(null);
+    };
+
+    const exportRender = () => {
+        const canvas = containerRef.current.querySelector('canvas');
+        if (canvas) {
+            const url = canvas.toDataURL("image/png");
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "revit_render.png";
+            a.click();
+            setStatusMessage("Render exported successfully.");
+        }
     };
 
     return (
@@ -165,9 +223,15 @@ export default function RevitBimInspector() {
                                     <div style={{ fontSize: "20px", color: "#666" }}>🏠</div>
                                     <span style={{ fontSize: "10px", marginTop: "2px" }}>Roof</span>
                                 </div>
-                                <div onClick={() => triggerTool("Floor")} style={{ display: "flex", flexDirection: "column", alignItems: "center", cursor: "pointer", color: "#444" }}>
-                                    <div style={{ fontSize: "20px", color: "#666" }}>⬛</div>
-                                    <span style={{ fontSize: "10px", marginTop: "2px" }}>Floor</span>
+                            </div>
+                            <div style={{ display: "flex", gap: "8px", borderRight: "1px solid #eee", paddingRight: "15px", height: "100%", alignItems: "center" }}>
+                                <div onClick={() => setElements([])} style={{ display: "flex", flexDirection: "column", alignItems: "center", cursor: "pointer", color: "#444" }}>
+                                    <div style={{ fontSize: "20px", color: "#d9534f" }}>🗑️</div>
+                                    <span style={{ fontSize: "10px", marginTop: "2px", color: "#d9534f" }}>Clear</span>
+                                </div>
+                                <div onClick={exportRender} style={{ display: "flex", flexDirection: "column", alignItems: "center", cursor: "pointer", color: "#444" }}>
+                                    <div style={{ fontSize: "20px", color: "#5cb85c" }}>📸</div>
+                                    <span style={{ fontSize: "10px", marginTop: "2px", color: "#5cb85c" }}>Render</span>
                                 </div>
                             </div>
                         </div>
@@ -250,69 +314,88 @@ export default function RevitBimInspector() {
                                 <div><div style={{ textAlign: "center", borderBottom: "1px solid #ddd", marginBottom: 2 }}>TOP</div>FRONT</div>
                             </div>
 
-                            <Canvas camera={{ position: [5, 3, 5], fov: 40 }} shadows>
+                            <Canvas camera={{ position: [5, 3, 5], fov: 40 }} shadows gl={{ preserveDrawingBuffer: true }}>
                                 <Environment preset="city" />
                                 <ambientLight intensity={0.5} />
                                 <directionalLight position={[5, 10, 5]} intensity={1.2} castShadow shadow-mapSize={[1024, 1024]} />
 
+                                {/* Invisible Ground Plane for Placements */}
+                                <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.49, 0]} onClick={handleGridClick} receiveShadow>
+                                    <planeGeometry args={[20, 20]} />
+                                    <meshBasicMaterial visible={false} />
+                                </mesh>
+
                                 <group position={[0, -0.5, 0]}>
-                                    {/* Wall - Realistic Brick look */}
-                                    <mesh position={[0, 1, 0]} castShadow receiveShadow onClick={handleSelect("wall")}>
-                                        <boxGeometry args={[4, 2, 0.4]} />
-                                        <meshStandardMaterial
-                                            color="#b56545" // brick red
-                                            roughness={0.9}
-                                            metalness={0.0}
-                                            emissive={selectedObject === BIM_DATA.wall ? "#0e5e9c" : "#000"}
-                                            emissiveIntensity={0.2}
-                                        />
-                                        <Edges color={selectedObject === BIM_DATA.wall ? "#0e5e9c" : "#5a3222"} scale={1.001} />
-                                    </mesh>
-
-                                    {/* Window - Realistic Glass and Frame */}
-                                    <group position={[-0.8, 1.2, 0.05]}>
-                                        {/* Frame */}
-                                        <mesh castShadow receiveShadow onClick={handleSelect("window")}>
-                                            <boxGeometry args={[1.1, 1.1, 0.5]} />
-                                            <meshStandardMaterial color="#333" roughness={0.5} metalness={0.8} />
-                                        </mesh>
-                                        {/* Glass pane - cut entirely through wall using physical transmission */}
-                                        <mesh position={[0, 0, 0.01]} onClick={handleSelect("window")}>
-                                            <boxGeometry args={[0.9, 0.9, 0.52]} />
-                                            <meshPhysicalMaterial
-                                                color="#e6f2ff"
-                                                transmission={0.95}
-                                                opacity={1}
-                                                transparent
-                                                roughness={0.05}
-                                                ior={1.5}
-                                                thickness={0.5}
-                                                emissive={selectedObject === BIM_DATA.window ? "#0e5e9c" : "#000"}
-                                                emissiveIntensity={0.2}
-                                            />
-                                        </mesh>
-                                        <Edges color={selectedObject === BIM_DATA.window ? "#0e5e9c" : "#111"} scale={1.001} />
-                                    </group>
-
-                                    {/* Door - Realistic solid core */}
-                                    <group position={[1, 0.5, 0.05]}>
-                                        {/* Frame */}
-                                        <mesh castShadow receiveShadow onClick={handleSelect("door")}>
-                                            <boxGeometry args={[0.98, 1.54, 0.45]} />
-                                            <meshStandardMaterial color="#ceb693" roughness={0.8} />
-                                        </mesh>
-                                        {/* Door panel */}
-                                        <mesh castShadow receiveShadow position={[0, 0, 0.1]} onClick={handleSelect("door")}>
-                                            <boxGeometry args={[0.9, 1.5, 0.1]} />
-                                            <meshStandardMaterial
-                                                color="#6b4c3a"
-                                                roughness={0.7}
-                                                emissive={selectedObject === BIM_DATA.door ? "#0e5e9c" : "#000"}
-                                                emissiveIntensity={0.2}
-                                            />
-                                        </mesh>
-                                        <Edges color={selectedObject === BIM_DATA.door ? "#0e5e9c" : "#3e2a21"} scale={1.001} />
-                                    </group>
+                                    {elements.map((el) => {
+                                        const isSelected = selectedObject && selectedObject.category.toLowerCase().includes(el.type);
+                                        if (el.type === 'wall') {
+                                            return (
+                                                <mesh key={el.id} position={el.position} castShadow receiveShadow onClick={(e) => { e.stopPropagation(); handleSelect(el.type)(e); }}>
+                                                    <boxGeometry args={[4, 2, 0.4]} />
+                                                    <meshStandardMaterial color="#b56545" roughness={0.9} emissive={isSelected ? "#0e5e9c" : "#000"} emissiveIntensity={0.2} />
+                                                    <Edges color={isSelected ? "#0e5e9c" : "#5a3222"} scale={1.001} />
+                                                </mesh>
+                                            );
+                                        }
+                                        if (el.type === 'window') {
+                                            return (
+                                                <group key={el.id} position={el.position}>
+                                                    <mesh castShadow receiveShadow onClick={(e) => { e.stopPropagation(); handleSelect(el.type)(e); }}>
+                                                        <boxGeometry args={[1.1, 1.1, 0.5]} />
+                                                        <meshStandardMaterial color="#333" roughness={0.5} metalness={0.8} />
+                                                    </mesh>
+                                                    <mesh position={[0, 0, 0.01]} onClick={(e) => { e.stopPropagation(); handleSelect(el.type)(e); }}>
+                                                        <boxGeometry args={[0.9, 0.9, 0.52]} />
+                                                        <meshPhysicalMaterial color="#e6f2ff" transmission={0.95} opacity={1} transparent roughness={0.05} ior={1.5} thickness={0.5} emissive={isSelected ? "#0e5e9c" : "#000"} emissiveIntensity={0.2} />
+                                                    </mesh>
+                                                    <Edges color={isSelected ? "#0e5e9c" : "#111"} scale={1.001} />
+                                                </group>
+                                            );
+                                        }
+                                        if (el.type === 'door') {
+                                            return (
+                                                <group key={el.id} position={el.position}>
+                                                    <mesh castShadow receiveShadow onClick={(e) => { e.stopPropagation(); handleSelect(el.type)(e); }}>
+                                                        <boxGeometry args={[0.98, 1.54, 0.45]} />
+                                                        <meshStandardMaterial color="#ceb693" roughness={0.8} />
+                                                    </mesh>
+                                                    <mesh castShadow receiveShadow position={[0, 0, 0.1]} onClick={(e) => { e.stopPropagation(); handleSelect(el.type)(e); }}>
+                                                        <boxGeometry args={[0.9, 1.5, 0.1]} />
+                                                        <meshStandardMaterial color="#6b4c3a" roughness={0.7} emissive={isSelected ? "#0e5e9c" : "#000"} emissiveIntensity={0.2} />
+                                                    </mesh>
+                                                    <Edges color={isSelected ? "#0e5e9c" : "#3e2a21"} scale={1.001} />
+                                                </group>
+                                            );
+                                        }
+                                        if (el.type === 'column') {
+                                            return (
+                                                <mesh key={el.id} position={el.position} castShadow receiveShadow onClick={(e) => { e.stopPropagation(); handleSelect(el.type)(e); }}>
+                                                    <cylinderGeometry args={[0.3, 0.3, 3, 32]} />
+                                                    <meshStandardMaterial color="#aaaaaa" roughness={0.8} emissive={isSelected ? "#0e5e9c" : "#000"} emissiveIntensity={0.2} />
+                                                    <Edges color={isSelected ? "#0e5e9c" : "#666"} scale={1.001} />
+                                                </mesh>
+                                            );
+                                        }
+                                        if (el.type === 'roof') {
+                                            return (
+                                                <mesh key={el.id} position={el.position} castShadow receiveShadow onClick={(e) => { e.stopPropagation(); handleSelect(el.type)(e); }}>
+                                                    <boxGeometry args={[5, 0.4, 5]} />
+                                                    <meshStandardMaterial color="#555" roughness={0.9} emissive={isSelected ? "#0e5e9c" : "#000"} emissiveIntensity={0.2} />
+                                                    <Edges color={isSelected ? "#0e5e9c" : "#222"} scale={1.001} />
+                                                </mesh>
+                                            );
+                                        }
+                                        if (el.type === 'floor') {
+                                            return (
+                                                <mesh key={el.id} position={el.position} receiveShadow onClick={(e) => { e.stopPropagation(); handleDeselect(); }}>
+                                                    <boxGeometry args={[6, 0.2, 6]} />
+                                                    <meshStandardMaterial color="#888" roughness={1} />
+                                                    <Edges color="#555" scale={1.001} />
+                                                </mesh>
+                                            );
+                                        }
+                                        return null;
+                                    })}
                                 </group>
 
                                 {/* Soft Contact Shadow on ground */}
