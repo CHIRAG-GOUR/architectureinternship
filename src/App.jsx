@@ -388,19 +388,18 @@ import { useLocation } from "react-router-dom";
 import IsometricBackground from "./components/IsometricBackground";
 import DetailedArchitectMapBackground from "./components/DetailedArchitectMapBackground";
 import PortfolioBackground from "./components/PortfolioBackground";
-import BackgroundElements from "./components/BackgroundElements";
-import StructuralBackground from "./components/StructuralBackground";
+import ThreeBackground from "./components/ThreeBackground";
 
 function BackgroundManager() {
   const location = useLocation();
   const path = location.pathname;
 
-  let BackgroundComponent = BackgroundElements;
+  let BackgroundComponent = ThreeBackground;
 
   if (path.includes("/chapter/")) {
     const chapterId = path.split("/chapter/")[1];
     if (chapterId === "1.1" || chapterId === "1.2" || chapterId === "1.3" || chapterId === "1.4" || chapterId === "1.5") {
-      BackgroundComponent = StructuralBackground;
+      BackgroundComponent = ThreeBackground;
     } else if (chapterId === "2.1") {
       BackgroundComponent = BlueprintBackground;
     } else if (chapterId === "2.2") {
