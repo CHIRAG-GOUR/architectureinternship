@@ -61,6 +61,7 @@ const CHAPTER_ACTIVITIES = {
   "2.1": [OrthographicSlicer, LineWeightStudio, ProjectionPuzzle],
   "2.2": [TheVanishingPoint, IsometricExtruder, PerspectiveDetective],
   "2.3": [CanvasCADSimulator, RhinoNurbsDemo, RevitBimInspector],
+  "5": [ExplodedAxonometric, AtmosphereDirector],
 };
 
 /* ── Mouse tilt on content cards ── */
@@ -386,23 +387,36 @@ function HomePage() {
 import { useLocation } from "react-router-dom";
 import IsometricBackground from "./components/IsometricBackground";
 import DetailedArchitectMapBackground from "./components/DetailedArchitectMapBackground";
+import PortfolioBackground from "./components/PortfolioBackground";
+import BackgroundElements from "./components/BackgroundElements";
+import StructuralBackground from "./components/StructuralBackground";
 
 function BackgroundManager() {
   const location = useLocation();
-  // Chapter 2.3 gets the Detailed Architect Map
-  if (location.pathname.includes("/chapter/2.3")) {
-    return <DetailedArchitectMapBackground />;
+  const path = location.pathname;
+
+  let BackgroundComponent = BackgroundElements;
+
+  if (path.includes("/chapter/")) {
+    const chapterId = path.split("/chapter/")[1];
+    if (chapterId === "1.1" || chapterId === "1.2" || chapterId === "1.3" || chapterId === "1.4" || chapterId === "1.5") {
+      BackgroundComponent = StructuralBackground;
+    } else if (chapterId === "2.1") {
+      BackgroundComponent = BlueprintBackground;
+    } else if (chapterId === "2.2") {
+      BackgroundComponent = IsometricBackground;
+    } else if (chapterId === "2.3") {
+      BackgroundComponent = DetailedArchitectMapBackground;
+    } else if (chapterId === "5") {
+      BackgroundComponent = PortfolioBackground;
+    }
   }
-  // Chapter 2.2 gets the Isometric Background
-  if (location.pathname.includes("/chapter/2.2")) {
-    return <IsometricBackground />;
-  }
-  // Chapter 2.1 gets the Blueprint Background
-  if (location.pathname.includes("/chapter/2.1")) {
-    return <BlueprintBackground />;
-  }
-  // Everything else (Module 1) gets the Abstract 3D Background
-  return <ThreeBackground />;
+
+  return (
+    <div style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", zIndex: -1 }}>
+      <BackgroundComponent />
+    </div>
+  );
 }
 
 /* ── Main App with routing ── */

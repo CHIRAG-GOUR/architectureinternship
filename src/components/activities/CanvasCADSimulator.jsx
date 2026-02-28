@@ -240,28 +240,29 @@ export default function CanvasCADSimulator() {
                     <div style={{ background: "#2d2d30", display: "flex", flexDirection: "column", borderBottom: "1px solid #111" }}>
                         <div style={{ display: "flex", gap: "2px", padding: "4px 8px", background: "#3e3e42", fontSize: "12px", color: "#fff" }}>
                             <span style={{ padding: "4px 12px", background: "#1e1e1e", borderTopLeftRadius: "4px", borderTopRightRadius: "4px" }}>Home</span>
-                            <span style={{ padding: "4px 12px", cursor: "pointer" }}>Insert</span>
-                            <span style={{ padding: "4px 12px", cursor: "pointer" }}>Annotate</span>
-                            <span style={{ padding: "4px 12px", cursor: "pointer" }}>View</span>
+                            <span onClick={() => { setCommandLog(prev => [...prev.slice(-7), "[Ribbon] Insert tab clicked. (Simulation Only)"]); }} style={{ padding: "4px 12px", cursor: "pointer" }}>Insert</span>
+                            <span onClick={() => { setCommandLog(prev => [...prev.slice(-7), "[Ribbon] Annotate tab clicked. (Simulation Only)"]); }} style={{ padding: "4px 12px", cursor: "pointer" }}>Annotate</span>
+                            <span onClick={() => { setCommandLog(prev => [...prev.slice(-7), "[Ribbon] View tab clicked. (Simulation Only)"]); }} style={{ padding: "4px 12px", cursor: "pointer" }}>View</span>
                             <div style={{ flex: 1 }}></div>
                             <button onClick={toggleFullscreen} style={{ background: "#0078d7", color: "white", border: "none", padding: "2px 10px", borderRadius: "2px", cursor: "pointer" }}>
                                 {isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
                             </button>
                         </div>
-                        <div style={{ display: "flex", padding: "8px", gap: "16px" }}>
+                        <div style={{ display: "flex", padding: "8px", gap: "16px", overflowX: "auto" }}>
                             <div style={{ display: "flex", gap: "4px", borderRight: "1px solid #555", paddingRight: "16px" }}>
                                 <RibbonButton icon="✏️" label="Line" onClick={() => { setCurrentInput("L"); handleCommand({ key: "Enter" }); }} />
-                                <RibbonButton icon="〰️" label="Polyline" />
-                                <RibbonButton icon="⭕" label="Circle" />
-                                <RibbonButton icon="📐" label="Arc" />
+                                <RibbonButton icon="〰️" label="Polyline" onClick={() => { setCommandLog(prev => [...prev.slice(-7), "Command: PLINE (Not implemented in demo)"]); }} />
+                                <RibbonButton icon="⭕" label="Circle" onClick={() => { setCommandLog(prev => [...prev.slice(-7), "Command: CIRCLE (Not implemented in demo)"]); }} />
+                                <RibbonButton icon="📐" label="Arc" onClick={() => { setCommandLog(prev => [...prev.slice(-7), "Command: ARC (Not implemented in demo)"]); }} />
                             </div>
                             <div style={{ display: "flex", gap: "4px", borderRight: "1px solid #555", paddingRight: "16px" }}>
-                                <RibbonButton icon="✂️" label="Trim" />
-                                <RibbonButton icon="🔄" label="Rotate" />
+                                <RibbonButton icon="✂️" label="Trim" onClick={() => { setCommandLog(prev => [...prev.slice(-7), "Select objects to trim: (Not implemented)"]); }} />
+                                <RibbonButton icon="🔄" label="Rotate" onClick={() => { setCommandLog(prev => [...prev.slice(-7), "Select objects to rotate: (Not implemented)"]); }} />
                                 <RibbonButton icon="🗑️" label="Erase" onClick={() => { setCurrentInput("CLEAR"); handleCommand({ key: "Enter" }); }} />
                             </div>
                             <div style={{ display: "flex", gap: "4px" }}>
                                 <RibbonButton icon="🔍" label="Zoom Extents" onClick={() => { setCurrentInput("Z"); handleCommand({ key: "Enter" }); }} />
+                                <RibbonButton icon="💾" label="Save" onClick={() => { setCommandLog(prev => [...prev.slice(-7), "Drawing saved to Web Storage."]); }} />
                             </div>
                         </div>
                     </div>

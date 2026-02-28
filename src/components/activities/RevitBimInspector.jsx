@@ -42,6 +42,8 @@ const BIM_DATA = {
 export default function RevitBimInspector() {
     const [selectedObject, setSelectedObject] = useState(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
+    const [activeTab, setActiveTab] = useState("Architecture");
+    const [statusMessage, setStatusMessage] = useState("Ready");
     const containerRef = useRef(null);
 
     const toggleFullscreen = () => {
@@ -64,10 +66,17 @@ export default function RevitBimInspector() {
         e.stopPropagation();
         setSelectedObject(null); // quick flash to re-trigger layout if needed
         setTimeout(() => setSelectedObject(BIM_DATA[key]), 10);
+        setStatusMessage(`Selected: ${BIM_DATA[key].type}`);
     };
 
     const handleDeselect = () => {
         setSelectedObject(null);
+        setStatusMessage("Ready");
+    };
+
+    const triggerTool = (toolName) => {
+        setStatusMessage(`Command active: Place ${toolName}. Click in the 3D view to place.`);
+        setTimeout(() => setStatusMessage("Ready"), 3000);
     };
 
     return (
@@ -103,49 +112,60 @@ export default function RevitBimInspector() {
                             <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
                                 <strong style={{ fontSize: "14px", letterSpacing: "1px" }}>R</strong>
                                 <span>Autodesk Revit - Project1.rvt - 3D View: {selectedObject ? `{3D - ${selectedObject.type}}` : "{3D}"}</span>
+                                <span style={{ marginLeft: "20px", color: "#aaddff", fontStyle: "italic" }}>{statusMessage}</span>
                             </div>
                             <button onClick={toggleFullscreen} style={{ background: "rgba(255,255,255,0.2)", border: "none", color: "white", padding: "2px 8px", cursor: "pointer", fontSize: "11px", borderRadius: "2px" }}>
                                 {isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
                             </button>
                         </div>
                         {/* Ribbon tabs */}
-                        <div style={{ display: "flex", fontSize: "12px", background: "#f5f6f7", borderBottom: "1px solid #e1e1e1", padding: "2px 0" }}>
+                        <div style={{ display: "flex", fontSize: "12px", background: "#f5f6f7", borderBottom: "1px solid #e1e1e1", padding: "2px 0", cursor: "default" }}>
                             <span style={{ padding: "4px 12px", color: "#000" }}>File</span>
-                            <span style={{ padding: "4px 12px", background: "#fff", borderTop: "2px solid #0e5e9c", borderLeft: "1px solid #e1e1e1", borderRight: "1px solid #e1e1e1", fontWeight: "bold" }}>Architecture</span>
-                            <span style={{ padding: "4px 12px", color: "#444" }}>Structure</span>
-                            <span style={{ padding: "4px 12px", color: "#444" }}>Steel</span>
-                            <span style={{ padding: "4px 12px", color: "#444" }}>Precast</span>
-                            <span style={{ padding: "4px 12px", color: "#444" }}>Systems</span>
-                            <span style={{ padding: "4px 12px", color: "#444" }}>Insert</span>
-                            <span style={{ padding: "4px 12px", color: "#444" }}>Annotate</span>
-                            <span style={{ padding: "4px 12px", color: "#444" }}>Analyze</span>
+                            {["Architecture", "Structure", "Steel", "Precast", "Systems", "Insert", "Annotate", "Analyze"].map(tab => (
+                                <span
+                                    key={tab}
+                                    onClick={() => setActiveTab(tab)}
+                                    style={{
+                                        padding: "4px 12px",
+                                        cursor: "pointer",
+                                        background: activeTab === tab ? "#fff" : "transparent",
+                                        borderTop: activeTab === tab ? "2px solid #0e5e9c" : "2px solid transparent",
+                                        borderLeft: activeTab === tab ? "1px solid #e1e1e1" : "1px solid transparent",
+                                        borderRight: activeTab === tab ? "1px solid #e1e1e1" : "1px solid transparent",
+                                        fontWeight: activeTab === tab ? "bold" : "normal",
+                                        color: activeTab === tab ? "#000" : "#444"
+                                    }}
+                                >
+                                    {tab}
+                                </span>
+                            ))}
                         </div>
                         {/* Ribbon tools */}
                         <div style={{ display: "flex", padding: "6px 10px", background: "#fff", height: "65px", gap: "15px", alignItems: "center" }}>
                             <div style={{ display: "flex", gap: "8px", borderRight: "1px solid #eee", paddingRight: "15px", height: "100%", alignItems: "center" }}>
-                                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", cursor: "pointer", color: "#444" }}>
+                                <div onClick={() => triggerTool("Wall")} style={{ display: "flex", flexDirection: "column", alignItems: "center", cursor: "pointer", color: "#444" }}>
                                     <div style={{ fontSize: "20px", color: "#666" }}>🧱</div>
                                     <span style={{ fontSize: "10px", marginTop: "2px" }}>Wall</span>
                                 </div>
-                                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", cursor: "pointer", color: "#444" }}>
+                                <div onClick={() => triggerTool("Door")} style={{ display: "flex", flexDirection: "column", alignItems: "center", cursor: "pointer", color: "#444" }}>
                                     <div style={{ fontSize: "20px", color: "#666" }}>🚪</div>
                                     <span style={{ fontSize: "10px", marginTop: "2px" }}>Door</span>
                                 </div>
-                                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", cursor: "pointer", color: "#444" }}>
+                                <div onClick={() => triggerTool("Window")} style={{ display: "flex", flexDirection: "column", alignItems: "center", cursor: "pointer", color: "#444" }}>
                                     <div style={{ fontSize: "20px", color: "#666" }}>🪟</div>
                                     <span style={{ fontSize: "10px", marginTop: "2px" }}>Window</span>
                                 </div>
                             </div>
                             <div style={{ display: "flex", gap: "8px", borderRight: "1px solid #eee", paddingRight: "15px", height: "100%", alignItems: "center" }}>
-                                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", cursor: "pointer", color: "#444" }}>
+                                <div onClick={() => triggerTool("Column")} style={{ display: "flex", flexDirection: "column", alignItems: "center", cursor: "pointer", color: "#444" }}>
                                     <div style={{ fontSize: "20px", color: "#666" }}>🏛️</div>
                                     <span style={{ fontSize: "10px", marginTop: "2px" }}>Column</span>
                                 </div>
-                                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", cursor: "pointer", color: "#444" }}>
+                                <div onClick={() => triggerTool("Roof")} style={{ display: "flex", flexDirection: "column", alignItems: "center", cursor: "pointer", color: "#444" }}>
                                     <div style={{ fontSize: "20px", color: "#666" }}>🏠</div>
                                     <span style={{ fontSize: "10px", marginTop: "2px" }}>Roof</span>
                                 </div>
-                                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", cursor: "pointer", color: "#444" }}>
+                                <div onClick={() => triggerTool("Floor")} style={{ display: "flex", flexDirection: "column", alignItems: "center", cursor: "pointer", color: "#444" }}>
                                     <div style={{ fontSize: "20px", color: "#666" }}>⬛</div>
                                     <span style={{ fontSize: "10px", marginTop: "2px" }}>Floor</span>
                                 </div>

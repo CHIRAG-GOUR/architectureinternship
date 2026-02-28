@@ -54,6 +54,7 @@ export default function RhinoNurbsDemo() {
     const [p, setP] = useState(2);
     const [q, setQ] = useState(3);
     const [isFullscreen, setIsFullscreen] = useState(false);
+    const [commandText, setCommandText] = useState("_TorusKnot");
     const containerRef = useRef(null);
 
     const toggleFullscreen = () => {
@@ -74,15 +75,23 @@ export default function RhinoNurbsDemo() {
         return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
     }, []);
 
-    const ToolbarIcon = ({ icon, active }) => (
-        <div style={{
-            width: 30, height: 30, background: active ? "#333" : "transparent",
-            border: active ? "1px solid #555" : "1px solid transparent",
-            borderRadius: 3, display: "flex", alignItems: "center", justifyContent: "center",
-            cursor: "pointer", fontSize: "16px", color: "#ddd"
-        }} onMouseEnter={e => e.currentTarget.style.background = "#444"} onMouseLeave={e => e.currentTarget.style.background = active ? "#333" : "transparent"}>
+    const ToolbarIcon = ({ icon, active, onClick }) => (
+        <div
+            onClick={onClick}
+            style={{
+                width: 30, height: 30, background: active ? "#333" : "transparent",
+                border: active ? "1px solid #555" : "1px solid transparent",
+                borderRadius: 3, display: "flex", alignItems: "center", justifyContent: "center",
+                cursor: "pointer", fontSize: "16px", color: "#ddd"
+            }} onMouseEnter={e => e.currentTarget.style.background = "#444"} onMouseLeave={e => e.currentTarget.style.background = active ? "#333" : "transparent"}>
             {icon}
         </div>
+    );
+
+    const MenuOption = ({ label }) => (
+        <span onClick={() => setCommandText(`Opening ${label} menu...`)} style={{ cursor: "pointer", padding: "2px 4px" }} onMouseEnter={e => e.currentTarget.style.background = "#555"} onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+            {label}
+        </span>
     );
 
     return (
@@ -113,16 +122,16 @@ export default function RhinoNurbsDemo() {
                 >
                     {/* Menu Bar */}
                     <div style={{ display: "flex", alignItems: "center", background: "#333", padding: "4px 8px", fontSize: "12px", color: "#ccc", gap: "10px", borderBottom: "1px solid #111" }}>
-                        <span>File</span>
-                        <span>Edit</span>
-                        <span>View</span>
-                        <span>Curve</span>
-                        <span>Surface</span>
-                        <span>Solid</span>
-                        <span>Mesh</span>
-                        <span>Dimension</span>
-                        <span>Transform</span>
-                        <span>Tools</span>
+                        <MenuOption label="File" />
+                        <MenuOption label="Edit" />
+                        <MenuOption label="View" />
+                        <MenuOption label="Curve" />
+                        <MenuOption label="Surface" />
+                        <MenuOption label="Solid" />
+                        <MenuOption label="Mesh" />
+                        <MenuOption label="Dimension" />
+                        <MenuOption label="Transform" />
+                        <MenuOption label="Tools" />
                         <div style={{ flex: 1 }}></div>
                         <button onClick={toggleFullscreen} style={{ background: "#444", color: "white", border: "1px solid #555", padding: "2px 10px", borderRadius: "2px", cursor: "pointer", fontSize: "11px" }}>
                             {isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
@@ -132,22 +141,22 @@ export default function RhinoNurbsDemo() {
                     {/* Command Line Area */}
                     <div style={{ background: "#1e1e1e", padding: "4px 8px", display: "flex", fontSize: "12px", borderBottom: "1px solid #111" }}>
                         <span style={{ color: "#bbb", marginRight: "8px" }}>Command:</span>
-                        <span style={{ color: "#fff" }}>_TorusKnot</span>
+                        <span style={{ color: "#fff" }}>{commandText}</span>
                     </div>
 
                     <div style={{ display: "flex", flex: 1, minHeight: 0 }}>
                         {/* Side Toolbar */}
                         <div style={{ width: 40, background: "#2a2a2a", borderRight: "1px solid #111", display: "flex", flexDirection: "column", alignItems: "center", padding: "8px 0", gap: "4px" }}>
-                            <ToolbarIcon icon="↖️" active={true} />
-                            <ToolbarIcon icon="⚫" />
-                            <ToolbarIcon icon="〰️" />
-                            <ToolbarIcon icon="🟩" />
-                            <ToolbarIcon icon="🟦" />
-                            <ToolbarIcon icon="🧊" />
-                            <ToolbarIcon icon="✂️" />
+                            <ToolbarIcon icon="↖️" active={true} onClick={() => setCommandText("Cancel")} />
+                            <ToolbarIcon icon="⚫" onClick={() => setCommandText("_Point")} />
+                            <ToolbarIcon icon="〰️" onClick={() => setCommandText("_Polyline")} />
+                            <ToolbarIcon icon="🟩" onClick={() => setCommandText("_Plane")} />
+                            <ToolbarIcon icon="🟦" onClick={() => setCommandText("_Box")} />
+                            <ToolbarIcon icon="🧊" onClick={() => setCommandText("_ExtrudeSrf")} />
+                            <ToolbarIcon icon="✂️" onClick={() => setCommandText("_Trim")} />
                             <div style={{ margin: "4px 0", width: "80%", height: "1px", background: "#444" }}></div>
-                            <ToolbarIcon icon="🔄" />
-                            <ToolbarIcon icon="↕️" />
+                            <ToolbarIcon icon="🔄" onClick={() => setCommandText("_Rotate")} />
+                            <ToolbarIcon icon="↕️" onClick={() => setCommandText("_Scale")} />
                         </div>
 
                         {/* 4-Viewport Grid */}

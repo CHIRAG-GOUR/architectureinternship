@@ -827,7 +827,7 @@ const chaptersData = [
     moduleSubtitle: "The Language of Builders",
     chapterTitle: "Chapter 1: Orthographic Projection",
     chapterSubtitle: "Mastering plans, sections, and elevations.",
-    heroImage: "/assets/orthographic_hero.png",
+    heroImage: "/assets/blueprint_hero_2_1.png",
     introText:
       "Since you've mastered the conceptual language of form, space, and site, we now move into Technical Foundations. Orthographic Projection is the universal language of builders and designers. It is a way of representing a three-dimensional object in two dimensions by \"flattening\" it onto a series of planes. Imagine a glass box around an object; orthographic projection is what you see when you look perfectly straight at each face of that box.",
     introVideos: [
@@ -1054,7 +1054,7 @@ const chaptersData = [
     moduleSubtitle: "From Board to Screen",
     chapterTitle: "Chapter 3: Digital Modeling (BIM/CAD)",
     chapterSubtitle: "Intro to industry-standard tools like Revit, Rhino, or AutoCAD.",
-    heroImage: "/assets/bim_digital_hero.png",
+    heroImage: "/assets/digital_bim_hero_2_3.png",
     introText:
       "We transition from the drafting board to the digital workspace. In the modern industry, we no longer just 'draw' buildings; we build them virtually. This shift is defined by two distinct philosophies: CAD (Computer-Aided Design) and BIM (Building Information Modeling).",
     introVideos: [
@@ -1156,6 +1156,53 @@ const chaptersData = [
         ],
       },
     },
+  },
+  {
+    id: "5",
+    tabLabel: "5. Portfolio Storytelling",
+    locked: false,
+    moduleTitle: "Module 5: Portfolio & Presentation",
+    moduleSubtitle: "Curating a visual narrative of a design process.",
+    chapterTitle: "Chapter 5: Portfolio Storytelling",
+    chapterSubtitle: "Curating a visual narrative of a design process.",
+    heroImage: "/assets/ch1_2_hero.jpg",
+    introText: "In architecture, a portfolio is more than a catalog of buildings; it is a document of your spatial intelligence. While a graphic designer might focus on a screen, an architect must narrate the transition from a 2D concept to a 3D reality, considering site, light, and human scale.",
+    introVideos: [
+      {
+        title: "Portfolio Storytelling",
+        url: "https://youtu.be/AGCQmC4EVhM?list=PLeGkR0Itekq300eVi-xHoY3rlaH-q_QwA&t=359"
+      }
+    ],
+    chapterVectors: [],
+    chapterImage: "https://login.skillizee.io/s/articles/69a1451c5bb20c055a2698b5/images/image-20260227181604-1.png",
+    chapterVideos: [
+      {
+        title: "1 Project and 3 Different Axonometric Styles",
+        url: "https://youtu.be/Ke9GNPLzjBI"
+      }
+    ],
+    concepts: [
+      {
+        title: "From Site Analysis to Tectonic Reality",
+        description: "In architecture, the 'story' is the logic that connects a patch of dirt to a finished structure. Your goal is to lead the reviewer through your mental model of the space. Every image must answer a 'why'.",
+        image: "https://login.skillizee.io/s/articles/69a1451c5bb20c055a2698b5/images/image-20260227181640-2.png",
+      },
+      {
+        title: "The Axonometric Diagram",
+        description: "The most powerful storytelling tool is often the 'Axonometric Diagram'. It allows you to 'explode' a building—pulling the roof off, lifting the walls, showing the mechanical systems—all in one clear, readable 3D view.",
+        image: "https://login.skillizee.io/s/articles/69a1451c5bb20c055a2698b5/images/image-20260227181656-3.png",
+      },
+      {
+        title: "The Human Element (Scale Figures)",
+        description: "A beautiful rendering of an empty plaza is a failure. Architecture exists for humans. You must populate your scenes with scale figures, entourage, and lighting that convey 'atmosphere'. A foggy morning render tells a different story than a high-noon summer render.",
+        image: "https://login.skillizee.io/s/articles/69a1451c5bb20c055a2698b5/images/image-20260227181710-4.png",
+      }
+    ],
+    goldenRule: "A pretty image without an architectural idea is just decoration. Always prioritize the 'why' over the 'what'.",
+    endingQuote: {
+      quote: "To create, one must first question everything.",
+      author: "Eileen Gray"
+    }
   }
 ];
 
