@@ -129,54 +129,57 @@ export default function CanvasCADSimulator() {
 
     }, [lines, offset, scale, isFullscreen]);
 
-    const handleCommand = (e) => {
-        if (e.key === "Enter") {
-            const val = currentInput.trim().toUpperCase();
-            setCurrentInput("");
+    const executeCommand = (val) => {
+        val = val.trim().toUpperCase();
+        const newLog = [...commandLog, `Command: ${val}`];
 
-            const newLog = [...commandLog, `Command: ${val}`];
-
-            if (state === "IDLE") {
-                if (val === "LINE" || val === "L") {
-                    setState("WAIT_P1");
-                    newLog.push("LINE Specify first point (x,y):");
-                } else if (val === "CLEAR") {
-                    setLines([]);
-                    newLog.push("Canvas cleared.");
-                } else if (val === "ZOOM" || val === "Z") {
-                    setScale(1);
-                    setOffset({ x: 0, y: 0 });
-                    newLog.push("Zoom extents applied.");
-                } else {
-                    newLog.push(`Unknown command "${val}". Press F1 for help.`);
-                }
-            } else if (state === "WAIT_P1") {
+        if (state === "IDLE") {
+            if (val === "LINE" || val === "L") {
+                setState("WAIT_P1");
+                newLog.push("LINE Specify first point (x,y):");
+            } else if (val === "CLEAR") {
+                setLines([]);
+                newLog.push("Canvas cleared.");
+            } else if (val === "ZOOM" || val === "Z") {
+                setScale(1);
+                setOffset({ x: 0, y: 0 });
+                newLog.push("Zoom extents applied.");
+            } else {
+                newLog.push(`Unknown command "${val}". Press F1 for help.`);
+            }
+        } else if (state === "WAIT_P1") {
+            const coords = val.split(",");
+            if (coords.length === 2 && !isNaN(coords[0]) && !isNaN(coords[1])) {
+                setP1({ x: parseFloat(coords[0]), y: parseFloat(coords[1]) });
+                setState("WAIT_P2");
+                newLog.push("Specify next point or [Undo]:");
+            } else {
+                newLog.push("Invalid point. Format must be X,Y (e.g., 50,50):");
+            }
+        } else if (state === "WAIT_P2") {
+            if (val === "" || val === "C") {
+                setState("IDLE");
+                newLog.push("Command canceled.");
+            } else {
                 const coords = val.split(",");
                 if (coords.length === 2 && !isNaN(coords[0]) && !isNaN(coords[1])) {
-                    setP1({ x: parseFloat(coords[0]), y: parseFloat(coords[1]) });
-                    setState("WAIT_P2");
+                    const p2 = { x: parseFloat(coords[0]), y: parseFloat(coords[1]) };
+                    setLines([...lines, { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y }]);
+                    setP1(p2); // Chain lines
                     newLog.push("Specify next point or [Undo]:");
                 } else {
-                    newLog.push("Invalid point. Format must be X,Y (e.g., 50,50):");
-                }
-            } else if (state === "WAIT_P2") {
-                if (val === "" || val === "C") {
-                    setState("IDLE");
-                    newLog.push("Command canceled.");
-                } else {
-                    const coords = val.split(",");
-                    if (coords.length === 2 && !isNaN(coords[0]) && !isNaN(coords[1])) {
-                        const p2 = { x: parseFloat(coords[0]), y: parseFloat(coords[1]) };
-                        setLines([...lines, { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y }]);
-                        setP1(p2); // Chain lines
-                        newLog.push("Specify next point or [Undo]:");
-                    } else {
-                        newLog.push("Invalid point. Format must be X,Y:");
-                    }
+                    newLog.push("Invalid point. Format must be X,Y:");
                 }
             }
+        }
 
-            setCommandLog(newLog.slice(-8)); // Keep last 8 logs
+        setCommandLog(newLog.slice(-8)); // Keep last 8 logs
+    };
+
+    const handleCommand = (e) => {
+        if (e.key === "Enter") {
+            executeCommand(currentInput);
+            setCurrentInput("");
         }
     };
 
@@ -294,7 +297,7 @@ export default function CanvasCADSimulator() {
                         </div>
                         <div style={{ display: "flex", padding: "8px", gap: "16px", overflowX: "auto" }}>
                             <div style={{ display: "flex", gap: "4px", borderRight: "1px solid #555", paddingRight: "16px" }}>
-                                <RibbonButton icon="✏️" label="Line" onClick={() => { setCurrentInput("L"); handleCommand({ key: "Enter" }); }} />
+                                <RibbonButton icon="✏️" label="Line" onClick={() => executeCommand("L")} />
                                 <RibbonButton icon="〰️" label="Polyline" onClick={() => { setCommandLog(prev => [...prev.slice(-7), "Command: PLINE (Not implemented in demo)"]); }} />
                                 <RibbonButton icon="⭕" label="Circle" onClick={() => { setCommandLog(prev => [...prev.slice(-7), "Command: CIRCLE (Not implemented in demo)"]); }} />
                                 <RibbonButton icon="📐" label="Arc" onClick={() => { setCommandLog(prev => [...prev.slice(-7), "Command: ARC (Not implemented in demo)"]); }} />
@@ -302,10 +305,10 @@ export default function CanvasCADSimulator() {
                             <div style={{ display: "flex", gap: "4px", borderRight: "1px solid #555", paddingRight: "16px" }}>
                                 <RibbonButton icon="✂️" label="Trim" onClick={() => { setCommandLog(prev => [...prev.slice(-7), "Select objects to trim: (Not implemented)"]); }} />
                                 <RibbonButton icon="🔄" label="Rotate" onClick={() => { setCommandLog(prev => [...prev.slice(-7), "Select objects to rotate: (Not implemented)"]); }} />
-                                <RibbonButton icon="🗑️" label="Erase" onClick={() => { setCurrentInput("CLEAR"); handleCommand({ key: "Enter" }); }} />
+                                <RibbonButton icon="🗑️" label="Erase" onClick={() => executeCommand("CLEAR")} />
                             </div>
                             <div style={{ display: "flex", gap: "4px" }}>
-                                <RibbonButton icon="🔍" label="Zoom Extents" onClick={() => { setCurrentInput("Z"); handleCommand({ key: "Enter" }); }} />
+                                <RibbonButton icon="🔍" label="Zoom Extents" onClick={() => executeCommand("Z")} />
                                 <RibbonButton icon="💾" label="Save & Export" onClick={() => {
                                     if (canvasRef.current) {
                                         const url = canvasRef.current.toDataURL("image/png");
