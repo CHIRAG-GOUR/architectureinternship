@@ -388,7 +388,6 @@ import { useLocation } from "react-router-dom";
 import IsometricBackground from "./components/IsometricBackground";
 import DetailedArchitectMapBackground from "./components/DetailedArchitectMapBackground";
 import PortfolioBackground from "./components/PortfolioBackground";
-import ThreeBackground from "./components/ThreeBackground";
 
 function BackgroundManager() {
   const location = useLocation();
