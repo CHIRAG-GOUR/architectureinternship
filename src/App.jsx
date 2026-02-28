@@ -49,6 +49,10 @@ import CanvasCADSimulator from "./components/activities/CanvasCADSimulator";
 import RhinoNurbsDemo from "./components/activities/RhinoNurbsDemo";
 import RevitBimInspector from "./components/activities/RevitBimInspector";
 
+/* Chapter 5 activities */
+import ExplodedAxonometric from "./components/activities/ExplodedAxonometric";
+import AtmosphereDirector from "./components/activities/AtmosphereDirector";
+
 import chaptersData from "./data/chapterData";
 
 /* ── Chapter-specific activity mappings ── */
