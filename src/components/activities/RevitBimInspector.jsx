@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Edges } from "@react-three/drei";
+import { OrbitControls, Edges, Environment, ContactShadows } from "@react-three/drei";
 import ScrollReveal from "../ScrollReveal";
 
 const BIM_DATA = {
@@ -11,7 +11,9 @@ const BIM_DATA = {
         fireRating: "2 Hours",
         thermalResistance: "R-20",
         manufacturer: "Generic Construction",
-        structural: "Yes"
+        structural: "Yes",
+        volume: "3.2 m³",
+        phase: "New Construction"
     },
     window: {
         category: "Window",
@@ -20,7 +22,9 @@ const BIM_DATA = {
         fireRating: "N/A",
         thermalResistance: "U-Factor 0.28",
         manufacturer: "Pella Windows",
-        structural: "No"
+        structural: "No",
+        sillHeight: "0.900 m",
+        headHeight: "2.100 m"
     },
     door: {
         category: "Door",
@@ -29,87 +33,280 @@ const BIM_DATA = {
         fireRating: "60 mins",
         thermalResistance: "R-5",
         manufacturer: "Masonite",
-        structural: "No"
+        structural: "No",
+        width: "0.900 m",
+        height: "2.100 m"
     }
 };
 
 export default function RevitBimInspector() {
     const [selectedObject, setSelectedObject] = useState(null);
+    const [isFullscreen, setIsFullscreen] = useState(false);
+    const containerRef = useRef(null);
+
+    const toggleFullscreen = () => {
+        if (!document.fullscreenElement) {
+            containerRef.current.requestFullscreen().catch(err => {
+                console.warn(`Error attempting to enable fullscreen: ${err.message}`);
+            });
+        } else {
+            document.exitFullscreen();
+        }
+    };
+
+    useEffect(() => {
+        const handleFullscreenChange = () => setIsFullscreen(!!document.fullscreenElement);
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    }, []);
 
     const handleSelect = (key) => (e) => {
         e.stopPropagation();
-        setSelectedObject(BIM_DATA[key]);
+        setSelectedObject(null); // quick flash to re-trigger layout if needed
+        setTimeout(() => setSelectedObject(BIM_DATA[key]), 10);
+    };
+
+    const handleDeselect = () => {
+        setSelectedObject(null);
     };
 
     return (
         <div className="section-gap">
-            <ScrollReveal className="content-card">
-                <div style={{ textAlign: "center" }}>
-                    <h3 style={{ color: "#5c4033", marginBottom: "0.5rem" }}>Revit BIM Inspector</h3>
-                    <p style={{ color: "#8b7355", fontSize: "0.95rem", marginBottom: "1.5rem" }}>
-                        In BIM, a wall isn't just lines—it's a database containing <strong>Information</strong>. Click the elements below to inspect their embedded data properties.
-                    </p>
+            <ScrollReveal className="content-card" style={{ padding: isFullscreen ? "0" : "2rem" }}>
+                {!isFullscreen && (
+                    <div style={{ textAlign: "center" }}>
+                        <h3 style={{ color: "#5c4033", marginBottom: "0.5rem" }}>Revit BIM Engine Emulator</h3>
+                        <p style={{ color: "#8b7355", fontSize: "0.95rem", marginBottom: "1.5rem" }}>
+                            In BIM, 3D logic is driven by data. Click elements to inspect their parametric metadata, or enter Fullscreen for the complete interface.
+                        </p>
+                    </div>
+                )}
 
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: "2rem" }}>
-                        {/* 3D Model */}
-                        <div style={{
-                            flex: "1 1 300px", height: "400px", border: "2px solid #d9c4a5", borderRadius: "8px", overflow: "hidden", background: "#f0efe9", cursor: "pointer"
-                        }}>
+                <div
+                    ref={containerRef}
+                    style={{
+                        border: isFullscreen ? "none" : "2px solid #555",
+                        borderRadius: isFullscreen ? "0" : "8px",
+                        overflow: "hidden",
+                        background: "#f3f3f3", // Revit light grey theme
+                        display: "flex",
+                        flexDirection: "column",
+                        width: "100%",
+                        height: isFullscreen ? "100vh" : "600px",
+                        fontFamily: "Segoe UI, Tahoma, Geneva, Verdana, sans-serif"
+                    }}
+                >
+                    {/* Top Ribbon & Quick Access Toolbar */}
+                    <div style={{ background: "#ffffff", display: "flex", flexDirection: "column", borderBottom: "1px solid #ccc" }}>
+                        {/* Title bar */}
+                        <div style={{ background: "#0e5e9c", color: "white", fontSize: "12px", padding: "4px 8px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                            <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                                <strong style={{ fontSize: "14px", letterSpacing: "1px" }}>R</strong>
+                                <span>Autodesk Revit - Project1.rvt - 3D View: {selectedObject ? `{3D - ${selectedObject.type}}` : "{3D}"}</span>
+                            </div>
+                            <button onClick={toggleFullscreen} style={{ background: "rgba(255,255,255,0.2)", border: "none", color: "white", padding: "2px 8px", cursor: "pointer", fontSize: "11px", borderRadius: "2px" }}>
+                                {isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
+                            </button>
+                        </div>
+                        {/* Ribbon tabs */}
+                        <div style={{ display: "flex", fontSize: "12px", background: "#f5f6f7", borderBottom: "1px solid #e1e1e1", padding: "2px 0" }}>
+                            <span style={{ padding: "4px 12px", color: "#000" }}>File</span>
+                            <span style={{ padding: "4px 12px", background: "#fff", borderTop: "2px solid #0e5e9c", borderLeft: "1px solid #e1e1e1", borderRight: "1px solid #e1e1e1", fontWeight: "bold" }}>Architecture</span>
+                            <span style={{ padding: "4px 12px", color: "#444" }}>Structure</span>
+                            <span style={{ padding: "4px 12px", color: "#444" }}>Steel</span>
+                            <span style={{ padding: "4px 12px", color: "#444" }}>Precast</span>
+                            <span style={{ padding: "4px 12px", color: "#444" }}>Systems</span>
+                            <span style={{ padding: "4px 12px", color: "#444" }}>Insert</span>
+                            <span style={{ padding: "4px 12px", color: "#444" }}>Annotate</span>
+                            <span style={{ padding: "4px 12px", color: "#444" }}>Analyze</span>
+                        </div>
+                        {/* Ribbon tools */}
+                        <div style={{ display: "flex", padding: "6px 10px", background: "#fff", height: "65px", gap: "15px", alignItems: "center" }}>
+                            <div style={{ display: "flex", gap: "8px", borderRight: "1px solid #eee", paddingRight: "15px", height: "100%", alignItems: "center" }}>
+                                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", cursor: "pointer", color: "#444" }}>
+                                    <div style={{ fontSize: "20px", color: "#666" }}>🧱</div>
+                                    <span style={{ fontSize: "10px", marginTop: "2px" }}>Wall</span>
+                                </div>
+                                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", cursor: "pointer", color: "#444" }}>
+                                    <div style={{ fontSize: "20px", color: "#666" }}>🚪</div>
+                                    <span style={{ fontSize: "10px", marginTop: "2px" }}>Door</span>
+                                </div>
+                                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", cursor: "pointer", color: "#444" }}>
+                                    <div style={{ fontSize: "20px", color: "#666" }}>🪟</div>
+                                    <span style={{ fontSize: "10px", marginTop: "2px" }}>Window</span>
+                                </div>
+                            </div>
+                            <div style={{ display: "flex", gap: "8px", borderRight: "1px solid #eee", paddingRight: "15px", height: "100%", alignItems: "center" }}>
+                                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", cursor: "pointer", color: "#444" }}>
+                                    <div style={{ fontSize: "20px", color: "#666" }}>🏛️</div>
+                                    <span style={{ fontSize: "10px", marginTop: "2px" }}>Column</span>
+                                </div>
+                                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", cursor: "pointer", color: "#444" }}>
+                                    <div style={{ fontSize: "20px", color: "#666" }}>🏠</div>
+                                    <span style={{ fontSize: "10px", marginTop: "2px" }}>Roof</span>
+                                </div>
+                                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", cursor: "pointer", color: "#444" }}>
+                                    <div style={{ fontSize: "20px", color: "#666" }}>⬛</div>
+                                    <span style={{ fontSize: "10px", marginTop: "2px" }}>Floor</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style={{ display: "flex", flex: 1, minHeight: 0 }}>
+                        {/* Properties Panel (Left) */}
+                        <div style={{ width: "260px", background: "#f5f6f7", borderRight: "1px solid #ccc", display: "flex", flexDirection: "column", fontSize: "11px" }}>
+                            <div style={{ padding: "4px 8px", background: "#e1e1e1", fontWeight: "bold", borderBottom: "1px solid #ccc", display: "flex", justifyContent: "space-between" }}>
+                                <span>Properties</span>
+                                <span style={{ cursor: "pointer" }}>▼</span>
+                            </div>
+
+                            {/* Type Selector Dropdown */}
+                            <div style={{ padding: "8px", borderBottom: "1px solid #ccc", background: "#fff" }}>
+                                <div style={{ display: "flex", alignItems: "center", border: "1px solid #bbb", borderRadius: "2px", padding: "4px", background: "#fdfdfd" }}>
+                                    {selectedObject ? (
+                                        <div style={{ flex: 1 }}>
+                                            <div style={{ fontWeight: "bold", fontSize: "12px", color: "#222" }}>{selectedObject.category}</div>
+                                            <div style={{ color: "#555" }}>{selectedObject.type}</div>
+                                        </div>
+                                    ) : (
+                                        <div style={{ flex: 1, fontStyle: "italic", color: "#888", padding: "4px 0" }}>
+                                            3D View: {`{3D}`}
+                                        </div>
+                                    )}
+                                    <div style={{ borderLeft: "1px solid #ccc", paddingLeft: "4px" }}>▼</div>
+                                </div>
+                            </div>
+
+                            {/* Data Grid */}
+                            <div style={{ flex: 1, overflowY: "auto", background: "#fff" }}>
+                                {selectedObject ? (
+                                    <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                                        <tbody>
+                                            {/* Header Row */}
+                                            <tr style={{ background: "#eef2f5" }}>
+                                                <td colSpan={2} style={{ padding: "4px 8px", fontWeight: "bold", borderBottom: "1px solid #ddd" }}>Constraints</td>
+                                            </tr>
+                                            <tr>
+                                                <td style={{ width: "45%", padding: "4px 8px", borderBottom: "1px solid #eee", borderRight: "1px solid #eee", color: "#555" }}>Base Constraint</td>
+                                                <td style={{ padding: "4px 8px", borderBottom: "1px solid #eee", color: "#111" }}>Level 1</td>
+                                            </tr>
+                                            <tr>
+                                                <td style={{ padding: "4px 8px", borderBottom: "1px solid #eee", borderRight: "1px solid #eee", color: "#555" }}>Top Constraint</td>
+                                                <td style={{ padding: "4px 8px", borderBottom: "1px solid #eee", color: "#111" }}>Up to level: Level 2</td>
+                                            </tr>
+
+                                            {/* Dynamic Properties */}
+                                            <tr style={{ background: "#eef2f5" }}>
+                                                <td colSpan={2} style={{ padding: "4px 8px", fontWeight: "bold", borderBottom: "1px solid #ddd", borderTop: "1px solid #ddd" }}>Identity Data</td>
+                                            </tr>
+                                            {Object.entries(selectedObject).map(([key, val]) => {
+                                                if (key === 'category' || key === 'type') return null; // skip headers
+                                                return (
+                                                    <tr key={key}>
+                                                        <td style={{ padding: "4px 8px", borderBottom: "1px solid #eee", borderRight: "1px solid #eee", color: "#555", textTransform: "capitalize" }}>
+                                                            {key.replace(/([A-Z])/g, ' $1').trim()}
+                                                        </td>
+                                                        <td style={{ padding: "4px 8px", borderBottom: "1px solid #eee", color: "#0e5e9c" }}>
+                                                            {val}
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            })}
+                                        </tbody>
+                                    </table>
+                                ) : (
+                                    <div style={{ padding: "16px", color: "#888", textAlign: "center", fontStyle: "italic" }}>
+                                        No item selected. Click on an element in the 3D view to inspect its BIM properties.
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* 3D Canvas Viewport */}
+                        <div style={{ flex: 1, position: "relative", background: "#fff" }} onClick={handleDeselect}>
+                            {/* ViewCube overlay placeholder */}
+                            <div style={{ position: "absolute", top: 16, right: 16, zIndex: 10, width: 60, height: 60, border: "1px solid #ccc", background: "rgba(255,255,255,0.8)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "10px", color: "#666", borderRadius: "2px", boxShadow: "0 2px 5px rgba(0,0,0,0.1)", pointerEvents: "none" }}>
+                                <div><div style={{ textAlign: "center", borderBottom: "1px solid #ddd", marginBottom: 2 }}>TOP</div>FRONT</div>
+                            </div>
+
                             <Canvas camera={{ position: [5, 3, 5], fov: 40 }} shadows>
-                                <ambientLight intensity={0.6} />
-                                <directionalLight position={[5, 10, 5]} intensity={1.5} castShadow />
+                                <Environment preset="city" />
+                                <ambientLight intensity={0.5} />
+                                <directionalLight position={[5, 10, 5]} intensity={1.2} castShadow shadow-mapSize={[1024, 1024]} />
 
-                                <group position={[0, -1, 0]}>
-                                    {/* Wall */}
+                                <group position={[0, -0.5, 0]}>
+                                    {/* Wall - Realistic Brick look */}
                                     <mesh position={[0, 1, 0]} castShadow receiveShadow onClick={handleSelect("wall")}>
                                         <boxGeometry args={[4, 2, 0.4]} />
-                                        <meshStandardMaterial color={selectedObject === BIM_DATA.wall ? "#c9a96e" : "#dfd6c8"} />
-                                        <Edges color="#8b7355" />
+                                        <meshStandardMaterial
+                                            color="#b56545" // brick red
+                                            roughness={0.9}
+                                            metalness={0.0}
+                                            emissive={selectedObject === BIM_DATA.wall ? "#0e5e9c" : "#000"}
+                                            emissiveIntensity={0.2}
+                                        />
+                                        <Edges color={selectedObject === BIM_DATA.wall ? "#0e5e9c" : "#5a3222"} scale={1.001} />
                                     </mesh>
 
-                                    {/* Window */}
-                                    <mesh position={[-0.8, 1.2, 0.05]} castShadow receiveShadow onClick={handleSelect("window")}>
-                                        <boxGeometry args={[1, 1, 0.5]} />
-                                        <meshPhysicalMaterial color="#85ABAB" transmission={0.8} opacity={1} transparent roughness={0.1} emissive={selectedObject === BIM_DATA.window ? "#c9a96e" : "#000"} emissiveIntensity={0.2} />
-                                        <Edges color="#1F3345" />
-                                    </mesh>
+                                    {/* Window - Realistic Glass and Frame */}
+                                    <group position={[-0.8, 1.2, 0.05]}>
+                                        {/* Frame */}
+                                        <mesh castShadow receiveShadow onClick={handleSelect("window")}>
+                                            <boxGeometry args={[1.1, 1.1, 0.5]} />
+                                            <meshStandardMaterial color="#333" roughness={0.5} metalness={0.8} />
+                                        </mesh>
+                                        {/* Glass pane - cut entirely through wall using physical transmission */}
+                                        <mesh position={[0, 0, 0.01]} onClick={handleSelect("window")}>
+                                            <boxGeometry args={[0.9, 0.9, 0.52]} />
+                                            <meshPhysicalMaterial
+                                                color="#e6f2ff"
+                                                transmission={0.95}
+                                                opacity={1}
+                                                transparent
+                                                roughness={0.05}
+                                                ior={1.5}
+                                                thickness={0.5}
+                                                emissive={selectedObject === BIM_DATA.window ? "#0e5e9c" : "#000"}
+                                                emissiveIntensity={0.2}
+                                            />
+                                        </mesh>
+                                        <Edges color={selectedObject === BIM_DATA.window ? "#0e5e9c" : "#111"} scale={1.001} />
+                                    </group>
 
-                                    {/* Door */}
-                                    <mesh position={[1, 0.5, 0.05]} castShadow receiveShadow onClick={handleSelect("door")}>
-                                        <boxGeometry args={[0.9, 1.5, 0.45]} />
-                                        <meshStandardMaterial color={selectedObject === BIM_DATA.door ? "#c9a96e" : "#8b7355"} />
-                                        <Edges color="#3e2a21" />
-                                    </mesh>
+                                    {/* Door - Realistic solid core */}
+                                    <group position={[1, 0.5, 0.05]}>
+                                        {/* Frame */}
+                                        <mesh castShadow receiveShadow onClick={handleSelect("door")}>
+                                            <boxGeometry args={[0.98, 1.54, 0.45]} />
+                                            <meshStandardMaterial color="#ceb693" roughness={0.8} />
+                                        </mesh>
+                                        {/* Door panel */}
+                                        <mesh castShadow receiveShadow position={[0, 0, 0.1]} onClick={handleSelect("door")}>
+                                            <boxGeometry args={[0.9, 1.5, 0.1]} />
+                                            <meshStandardMaterial
+                                                color="#6b4c3a"
+                                                roughness={0.7}
+                                                emissive={selectedObject === BIM_DATA.door ? "#0e5e9c" : "#000"}
+                                                emissiveIntensity={0.2}
+                                            />
+                                        </mesh>
+                                        <Edges color={selectedObject === BIM_DATA.door ? "#0e5e9c" : "#3e2a21"} scale={1.001} />
+                                    </group>
                                 </group>
+
+                                {/* Soft Contact Shadow on ground */}
+                                <ContactShadows position={[0, -0.49, 0]} opacity={0.5} scale={10} blur={2} far={4} />
 
                                 <OrbitControls makeDefault enableZoom={true} />
                             </Canvas>
-                        </div>
 
-                        {/* Properties Panel */}
-                        <div style={{
-                            flex: "1 1 300px", background: "#faf7f2", border: "1px solid #d9cbb9", borderRadius: "8px", padding: "1.5rem", textAlign: "left"
-                        }}>
-                            <h4 style={{ color: "#5c4033", borderBottom: "2px solid #c9a96e", paddingBottom: "0.5rem", marginBottom: "1rem" }}>
-                                Properties {selectedObject ? `: ${selectedObject.category}` : "(Select an object)"}
-                            </h4>
-
-                            {selectedObject ? (
-                                <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.9rem" }}>
-                                    <tbody>
-                                        {Object.entries(selectedObject).map(([key, val]) => (
-                                            <tr key={key} style={{ borderBottom: "1px solid #ece2d2" }}>
-                                                <td style={{ padding: "0.5rem 0", fontWeight: 600, color: "#8b7355", textTransform: "capitalize" }}>{key.replace(/([A-Z])/g, ' $1').trim()}</td>
-                                                <td style={{ padding: "0.5rem 0", color: "#4a3728", textAlign: "right" }}>{val}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            ) : (
-                                <p style={{ color: "#8b7355", fontStyle: "italic", fontSize: "0.9rem" }}>
-                                    Hover and click on the Wall, Window, or Door in the 3D view to reveal its embedded building data.
-                                </p>
-                            )}
+                            {/* View Control Bar at bottom of viewport */}
+                            <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, background: "#f5f6f7", padding: "2px 8px", borderTop: "1px solid #ccc", display: "flex", gap: "10px", fontSize: "11px", color: "#444" }}>
+                                <span>1 : 100</span>
+                                <span style={{ borderLeft: "1px solid #ccc", paddingLeft: "10px" }}>Visual Style: Realistic</span>
+                                <span style={{ borderLeft: "1px solid #ccc", paddingLeft: "10px" }}>Detail Level: Fine</span>
+                            </div>
                         </div>
                     </div>
                 </div>

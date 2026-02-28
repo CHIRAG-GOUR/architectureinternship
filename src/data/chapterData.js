@@ -1054,7 +1054,7 @@ const chaptersData = [
     moduleSubtitle: "From Board to Screen",
     chapterTitle: "Chapter 3: Digital Modeling (BIM/CAD)",
     chapterSubtitle: "Intro to industry-standard tools like Revit, Rhino, or AutoCAD.",
-    heroImage: "/assets/digital_modeling_hero.png",
+    heroImage: "/assets/bim_digital_hero.png",
     introText:
       "We transition from the drafting board to the digital workspace. In the modern industry, we no longer just 'draw' buildings; we build them virtually. This shift is defined by two distinct philosophies: CAD (Computer-Aided Design) and BIM (Building Information Modeling).",
     introVideos: [
